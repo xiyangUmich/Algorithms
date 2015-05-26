@@ -7,7 +7,7 @@ public:
         temp.push_back(1);
         result.push_back(temp);
        
-        if(numRows==1) return result;
+        if(numRows==1) return result;  //Do not forget this special situation
      
       for(int i=1;i<numRows;i++){
           temp.clear();
