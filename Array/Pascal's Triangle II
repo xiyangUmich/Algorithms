@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+       vector<int> res;
+       if(rowIndex<0) return res;
+       
+       res.push_back(1);
+       if(rowIndex==0) return res;
+       
+       res.push_back(1);
+       if(rowIndex==1) return res;
+       
+       int temp1=0,temp2=0;
+       for(int i=2;i<=rowIndex;i++){
+           temp1=res[0];
+           temp2=res[1];
+           res[1]=temp1+temp2;
+           for(int j=2;j<i;j++){
+               temp1=temp2;
+               temp2=res[j];
+               res[j]=temp1+temp2;
+            }
+            res.push_back(1);
+       }
+       return res;
+       
+    }
+};
