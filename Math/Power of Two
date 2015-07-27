@@ -1,0 +1,15 @@
+Given an integer, write a function to determine if it is a power of two.
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        long long num=1;
+      while(num<=n){
+       if(n==1) return true;  
+       num=num<<1;
+       if(num==n) return true;
+      }
+      return false;
+    }
+};
+// A num will be multipled by 2 when moved to left by 1 bit
