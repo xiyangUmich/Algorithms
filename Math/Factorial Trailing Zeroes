@@ -3,6 +3,8 @@ Given an integer n, return the number of trailing zeroes in n!.
 Once there is a pair of 2 and 5 factors of digits during n!, there is a 0;
 number of 5 is always bigger than or equal to that of 2;
 There exists some numbers like 25 include more than one factors of 5;
+In another word, every 5 numbers should have a trailing zero;
+
 **/
 
 class Solution {
