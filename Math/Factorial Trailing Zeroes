@@ -1,0 +1,19 @@
+Given an integer n, return the number of trailing zeroes in n!.
+/**
+Once there is a pair of 2 and 5 factors of digits during n!, there is a 0;
+number of 5 is always bigger than or equal to that of 2;
+There exists some numbers like 25 include more than one factors of 5;
+**/
+
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int result=0;
+        while(n){
+            result +=n/5;
+            n/=5;
+        }
+    
+        return result;
+    }
+};
