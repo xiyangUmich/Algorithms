@@ -1,0 +1,50 @@
+/* reference: leetcode official clean code handbook 
+2 Roman Literal Decimal 
+3 I 1 
+4 V 5 
+5 X 10 
+6 L 50 
+7 C 100 
+8 D 500 
+9 M 1000 
+10 Let’s work through some examples. Assume the input is “VII”, using the [additive 
+11 notation], we could simply add up each roman literal, ‘V’ + ‘I’ + ‘I’ = 5 + 1 + 1 = 7. 
+12 Now let’s look at another example input “IV”. Now we need to use the [subtractive  
+13 notation]. We first look at ‘I’, and we add 1 to it. Then we look at ‘V’ and since a  
+14 smaller roman literal ‘I’ appears before it, we need to subtract ‘I’ from ‘V’. Remember  
+15 that we already added another ‘I’ before it, so we need to subtract a total of two one’s  
+16 from it. 
+17 Below is a more complex example that involves both additive and subtractive notation:  
+18 “MXCVI”.  
+19 Roman literals from left to right Accumulated total 
+20 M 1000 
+21 MX 1000 + 10 = 1010 
+22 MXC 1010 + (100 – 2 * 10) = 1010 + 80 = 1090  
+23 MXCV 1090 + 5 = 1095 
+24 MXCVI 1095 + 1 = 1096 
+25  */ 
+
+class Solution {
+
+
+public:
+    int romanToInt(string s) {
+        unordered_map<char, int> RomInt; 
+    RomInt['I']=1;
+    RomInt['V']=5;
+    RomInt['X']=10;
+    RomInt['L']=50;
+    RomInt['C']=100;
+    RomInt['D']=500;
+    RomInt['M']=1000;
+    
+       int result=0;
+       for(int i=0;i<s.size();i++){
+           result=result+RomInt[s[i]];
+           if(i!=0&&RomInt[s[i]]>RomInt[s[i-1]]) 
+            result=result-2*RomInt[s[i-1]];
+       }
+       if(result>INT_MAX) return INT_MAX;
+       return (int)result;
+    }
+};
