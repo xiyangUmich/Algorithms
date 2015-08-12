@@ -28,7 +28,7 @@ public:
             ++count[tolower(c)];         //change to lower case
         }
         for(const auto& c:t){              //can without "const", "&"; can change auto to char
-            --count[tolower(c)];
+            --count[tolower(c)];            const: increase security for using the "&"
             if(count[tolower(c)]<0) return false;
         }
         return true;
