@@ -1,0 +1,33 @@
+Given a binary tree, return all root-to-leaf paths. 
+
+class Solution {
+public:
+    
+      vector<string> result;
+      void treePathHelper(string path, TreeNode* node){
+          if(!node->left && !node->right){
+              path+=to_string(node->val);
+              result.push_back(path);
+          }
+          else if(!node->right){
+             path+=to_string(node->val)+"->";
+             treePathHelper(path, node->left);
+          }
+          else if(!node->left){
+             path+=to_string(node->val)+"->";
+             treePathHelper(path, node->right); 
+          }
+          else{
+              path+=to_string(node->val)+"->";
+              string path2=path;
+              treePathHelper(path, node->left);
+              treePathHelper(path, node->right);
+          }
+      }
+      vector<string> binaryTreePaths(TreeNode* root) {
+          if(!root) return result;
+          string path;
+          treePathHelper(path, root);
+          return result;
+    }
+};
