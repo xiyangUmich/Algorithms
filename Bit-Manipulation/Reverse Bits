@@ -1,0 +1,17 @@
+Reverse bits of a given 32 bits unsigned integer
+
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t m=0;
+        for(int i=0;i<32;i++){
+            if(n%2==1) m++;
+            n=n>>1;
+            if(i<31) m=m<<1;
+        }
+        return m;
+    }
+};
+
+uint32_t an integer in a binary style with length equal to 32 bits ;
+n=n>>1 <=>n/=2
