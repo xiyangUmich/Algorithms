@@ -1,0 +1,36 @@
+class Queue {
+    
+public:
+    stack<int> myStack;
+    vector<int> myVector;
+    Queue(){
+        stack<int> myStack;
+    }
+        
+    
+    // Push element x to the back of queue.
+    void push(int x) {
+        myStack.push(x);
+        myVector.push_back(x);
+      }
+
+    // Removes the element from in front of queue.
+    void pop(void) {
+      while(!myStack.empty()) myStack.pop();
+      for(int i=1;i<myVector.size();i++){
+          myStack.push(myVector[i]);
+      }
+       myVector.erase(myVector.begin());
+    }
+
+    // Get the front element.
+    int peek(void) {
+       
+       return myVector[0];
+    }
+
+    // Return whether the queue is empty.
+    bool empty(void) {
+       return  myStack.empty();
+    }
+};
