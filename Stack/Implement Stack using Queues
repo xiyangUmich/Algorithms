@@ -1,0 +1,30 @@
+class Stack {
+public:
+    
+    vector<int> myVector;
+    queue<int> myQueue;
+    
+    // Push element x onto stack.
+    void push(int x) {
+        myQueue.push(x);
+        myVector.push_back(x);
+    }
+
+    // Removes the element on top of the stack.
+    void pop() {
+        while(!myQueue.empty()) myQueue.pop();
+        for(int i=0;i<myVector.size()-1;i++)
+            myQueue.push(myVector[i]);
+        myVector.erase(myVector.end()-1);
+    }
+
+    // Get the top element.
+    int top() {
+        return myVector[myVector.size()-1];
+    }
+
+    // Return whether the stack is empty.
+    bool empty() {
+       return myQueue.empty(); 
+    }
+};
