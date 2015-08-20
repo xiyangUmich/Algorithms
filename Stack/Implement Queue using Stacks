@@ -1,7 +1,7 @@
 class Queue {
     
 public:
-    //stack<int> myStack;
+    stack<int> myStack;
     vector<int> myVector;
     Queue(){
         stack<int> myStack;
