@@ -1,0 +1,25 @@
+Write a program to find the n-th ugly number
+
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+       vector<int> res;
+       res.push_back(1);
+       //vector<int>::iterator p2=res.begin(), p3=res.begin(), p5=res.begin();
+       int p2=0, p3=0, p5=0;
+       while(res.size()<n){
+       //int temp=min(*p2*2, min(*p3*3, *p5*5));
+       int temp=min(res[p2]*2, min(res[p3]*3, res[p5]*5));
+       res.push_back(temp);
+       //if(temp==*p2*2) p2++;
+       if(temp==res[p2]*2) p2++;
+        if(temp==res[p3]*3) p3++;
+         if(temp==res[p5]*5) p5++;
+       //if(temp==*p3*3) p3++;
+       //if(temp==*p5*5) p5++;
+       if(res[res.size()-1]>=INT_MAX) return INT_MAX;
+       }
+       return res[n-1];
+       
+    }
+};
