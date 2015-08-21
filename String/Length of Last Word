@@ -1,0 +1,26 @@
+Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
+
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+       int length=0;
+       int i=0;
+       while(s[i]==' ' && i<s.size()) ++i;
+       while(i<s.size()){
+           if(s[i]==' '){
+               while(i<s.size()){
+                   if(s[i]!=' '){
+                       length=0;
+                       break;
+                   }
+                   if(i==s.size()-1) return length;
+                   ++i;
+               }
+             }
+               
+           ++length;
+           ++i;
+           }
+           return length;
+        }
+};
