@@ -1,3 +1,5 @@
+Given a list of words and two words word1 and word2, return the shortest distance between these two words in the list.
+Methods1:
 class Solution {
 public:
     int shortestDistance(vector<string>& words, string word1, string word2) {
@@ -19,4 +21,21 @@ public:
       return dis;  
     }
     
+};
+
+Methods2:
+class Solution {
+public:
+    int shortestDistance(vector<string>& words, string word1, string word2) {
+        int pos1=-1, pos2=-1;
+        int size=words.size();
+        int dis=size;
+        for(vector<string>::iterator it=words.begin();it!=words.end();++it){
+            if(word1.compare(*it)==0) pos1=it-words.begin();
+            else if(word2.compare(*it)==0) pos2=it-words.begin();     
+            else continue;
+            if(pos1>=0 && pos2>=0 && abs(pos1-pos2)<dis) dis=abs(pos1-pos2);  //Just need to consider pos1[i] and pos1[i-1] when finding a pos2[i]
+        }
+        return dis;
+    }
 };
