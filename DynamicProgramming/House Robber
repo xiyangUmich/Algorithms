@@ -1,0 +1,22 @@
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+class Solution{
+    
+public:
+int rob(vector<int> &num) {
+    int length = num.size();
+    if(length==0)
+        return 0;
+    if(length==1)
+        return num[0];
+        vector<int> g;
+    //int g[length] = {0};
+    //g[0] = num[0];
+    //g[1] = max(num[0],num[1]);
+    g.push_back(num[0]);
+    g.push_back(max(num[0],num[1]));
+    for(int i=2;i<length;i++)
+         //g[i] = max(g[i-1],num[i]+g[i-2]);
+         g.push_back(max(g[i-1],num[i]+g[i-2]));
+    return g[length-1]; 
+}
+};// When using vector, better use push_back instead of "="
