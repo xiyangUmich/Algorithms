@@ -1,0 +1,11 @@
+Given an array of integers, every element appears twice except for one. Find that single one.
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_map<int, int> res;
+        for(auto& t:nums) ++res[t];
+        for(auto& t:nums) if(res[t]==1) return t;
+        
+    }
+};
