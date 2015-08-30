@@ -1,0 +1,27 @@
+
+Given a non-empty binary search tree and a target value, find the value in the BST that is closest to the target.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int res=INT_MAX;
+    int closestValue(TreeNode* root, double target) {
+      int curr;
+     // int res=INT_MAX;
+      if(root==NULL) return res;
+      curr=root->val;
+      
+      if(curr==target) return curr;
+      if(res==INT_MAX || abs(curr-target)<abs(res-target)) res=curr;   
+      if(curr<target) return closestValue(root->right,target);
+      else return closestValue(root->left,target);
+    }
+};
