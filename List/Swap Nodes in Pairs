@@ -1,0 +1,28 @@
+Given a linked list, swap every two adjacent nodes and return its head. 
+
+For example,
+ Given 1->2->3->4, you should return the list as 2->1->4->3. 
+
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if(head==NULL || head->next==NULL) return head;
+        ListNode* p=head;
+        ListNode* p2=head->next;
+        ListNode* temp;
+            p->next=p2->next;
+            p2->next=p;
+            temp=p;
+            p=p->next;
+            head=p2;
+            if(p!=NULL) p2=p->next;
+        while(p && p2){
+            temp->next=p2;
+            p->next=p2->next;
+            p2->next=p;
+            temp=p;
+            p=p->next;
+            if(p!=NULL) p2=p->next;
+        }
+        return head;
+    }
+};
