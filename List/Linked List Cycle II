@@ -1,0 +1,16 @@
+Given a linked list, return the node where the cycle begins. If there is no cycle, return null. 
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(head==NULL) return NULL;
+        ListNode* p=head;
+      unordered_map<ListNode*,int> map;
+       while(p!=NULL){
+           ++map[p];
+           if(map[p]>1) return p;
+           p=p->next;
+       }
+       return NULL;
+    }
+};
