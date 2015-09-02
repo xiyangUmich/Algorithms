@@ -1,0 +1,29 @@
+ass Solution {
+public:
+    bool verifyPreorder(vector<int>& preorder) {
+        int target=0;
+        int end=preorder.size()-1;
+        return verifyPreorderHelper(preorder,target,end);
+        }
+   
+    bool verifyPreorderHelper(vector<int>& preorder,int target, int end){
+        int begin=target+1;
+        if(end<=begin) return true;
+        int i=begin;
+        int mid=i;
+        while(i<=end){
+            if(preorder[i]<preorder[target]) ++i;
+        }
+        mid=i;
+        ++i;
+        while(i<=end){
+            if(preorder[i]<preorder[target]) return false;
+            ++i;
+        }
+        
+        if(mid==begin || mid>end) return verifyPreorderHelper(preorder,target+1,end);
+        else return  (verifyPreorderHelper(preorder,target+1,mid-1) && 
+                        verifyPreorderHelper(preorder,mid,end));
+        return true;
+    }
+};
