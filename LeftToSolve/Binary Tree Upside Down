@@ -1,0 +1,41 @@
+For example:
+ Given a binary tree {1,2,3,4,5},
+    1
+   / \
+  2   3
+ / \
+4   5
+
+
+
+return the root of the binary tree [4,5,2,#,#,3,1].
+
+   4
+  / \
+ 5   2
+    / \
+   3   1  
+
+class Solution {
+public:
+    TreeNode* upsideDownBinaryTree(TreeNode* root) {
+      
+       if(root==NULL || root->left==NULL) return root;
+       TreeNode* head=NULL;
+       
+       TreeNode* curr=root;
+       TreeNode* temp;
+       temp->val=curr->val;
+       temp->left=NULL;
+       temp->right=NULL;
+       while(curr->left!=NULL){
+          
+          head->val=curr->left->val;
+          head->right=temp;
+          head->left=curr->right;
+          temp=head;
+          curr=curr->left;
+       }
+       return head;
+    }
+};
