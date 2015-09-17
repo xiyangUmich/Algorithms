@@ -1,0 +1,17 @@
+Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        return sortedArrayToBSTHelper(nums,0,nums.size()-1);
+    }
+    TreeNode* sortedArrayToBSTHelper(vector<int>& nums, int begin, int end){
+        if(begin>end) return NULL;
+        
+        int mid=(begin+end)/2;
+        TreeNode* temp=new TreeNode(nums[mid]);
+        temp->left=sortedArrayToBSTHelper(nums,begin,mid-1);
+        temp->right=sortedArrayToBSTHelper(nums,mid+1,end);
+        return temp;
+    }
+};
