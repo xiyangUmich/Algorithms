@@ -1,0 +1,23 @@
+Design a class which receives a list of words in the constructor, and implements a method that takes two words word1 and word2 and return the shortest distance between these two words in the list.
+
+class WordDistance {
+    private:
+    unordered_map<string, vector<int>> map;
+public:
+    WordDistance(vector<string>& words) {
+       for(int i=0;i<words.size();++i){
+           map[words[i]].push_back(i);
+       }
+    }
+
+    int shortest(string word1, string word2) {
+        long dis=INT_MAX;
+        int i=0, j=0;
+        while(i<map[word1].size() && j<map[word2].size()){
+            if(abs(map[word1][i]-map[word2][j])<dis)
+                dis=abs(map[word1][i]-map[word2][j]);
+            map[word1][i]<map[word2][j]?++i:++j;
+        }
+        return dis;
+    }
+};
