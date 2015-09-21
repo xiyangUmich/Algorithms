@@ -1,0 +1,16 @@
+class Solution {
+private:
+    vector<int> res;
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        //vector<int> res;
+        helper(root);
+        return res;
+    }
+    void helper(TreeNode* root){
+        if(root==NULL) return;
+        helper(root->left);
+        helper(root->right);
+        res.push_back(root->val);
+    }
+};
