@@ -1,0 +1,30 @@
+Given an array of numbers, verify whether it is the correct preorder traversal sequence of a binary search tree.
+
+You may assume each number in the sequence is unique.
+
+class Solution {
+public:
+    bool verifyPreorder(vector<int>& preorder) {
+       stack<int> s;
+       int size=preorder.size();
+       if(size<=2) return true;
+       int currRoot=INT_MIN;
+       s.push(preorder[0]);
+       for(int i=1;i<size;++i){
+           if(s.empty() || preorder[i]<s.top()){
+               if(preorder[i]<currRoot) return false;
+               s.push(preorder[i]);
+           }
+           if(!s.empty() && preorder[i]>s.top()){
+               while(!s.empty() && preorder[i]>s.top()){
+                   currRoot=s.top();
+                   s.pop();
+               }
+               s.push(preorder[i]);
+           }
+       }
+       return true;
+        }
+   
+    
+};
