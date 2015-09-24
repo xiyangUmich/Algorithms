@@ -1,0 +1,24 @@
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
+
+For example, given the following triangle
+
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int size=triangle.size();
+        vector<int> result(triangle[size-1]);  //Could be initialized by anoth vector
+        for(int i=triangle.size()-2;i>=0;--i){
+            for(int j=0;j<=i;++j){
+                result[j]=triangle[i][j]+min(result[j],result[j+1]);
+            }
+        }
+        return result[0];
+    }
+};
