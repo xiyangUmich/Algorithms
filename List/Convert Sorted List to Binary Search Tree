@@ -1,0 +1,39 @@
+Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if(head==NULL) return NULL;
+        vector<int> nums;
+        while(head){
+            nums.push_back(head->val);
+            head=head->next;
+        }
+        TreeNode* root=NULL;
+        sortedListToBST(nums, root, 0, nums.size()-1);
+        return root;
+    }
+    void sortedListToBST(vector<int> &nums, TreeNode* &root, int indexBegin, int indexEnd){
+        if(indexBegin>indexEnd) return;
+        int mid=(indexBegin+indexEnd)/2;
+        root=new TreeNode(nums[mid]);
+        sortedListToBST(nums, root->left, indexBegin, mid-1);
+        sortedListToBST(nums, root->right, mid+1, indexEnd);
+    }
+};
