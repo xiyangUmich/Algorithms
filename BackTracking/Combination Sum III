@@ -1,0 +1,38 @@
+Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+
+Ensure that numbers within the set are sorted in ascending order.
+
+
+Example 1:
+
+Input: k = 3, n = 7
+
+Output:
+
+[[1,2,4]]
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> res;
+        vector<int> path;
+        if(k==0 || n==0) res.push_back(path);
+        else helper(res, path, 1, k, n);
+        return res;
+    }
+    void helper(vector<vector<int>> &res, vector<int> &path, int start, int k, int n){
+        if(k==1){
+            if(n>=start && n<10){
+              path.push_back(n);
+              res.push_back(path);
+              path.pop_back();
+            } 
+            return;
+        }
+        for(int i=start;i<=n/k && i<10;++i){
+            path.push_back(i);
+            helper(res,path,i+1,k-1,n-i);
+            path.pop_back();
+        }
+    }
+};
