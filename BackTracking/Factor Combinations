@@ -1,0 +1,36 @@
+Write a function that takes an integer n and return all possible combinations of its factors. 
+input: 32
+ output:
+[
+  [2, 16],
+  [2, 2, 8],
+  [2, 2, 2, 4],
+  [2, 2, 2, 2, 2],
+  [2, 4, 4],
+  [4, 8]
+]
+
+class Solution {
+public:
+    vector<vector<int>> getFactors(int n) {
+        vector<vector<int>> res;
+        vector<int> path;
+        int pre=0;
+        helper(res,path,n,pre);
+        return res;
+        
+    }
+    void helper(vector<vector<int>>& res, vector<int>& path, int n,int pre){
+        for(int i=2;i<=pow(n,0.5);++i){
+            if(n%i==0 && i>=pre && n/i>=i){
+            path.push_back(i);
+            path.push_back(n/i);
+            res.push_back(path);
+            path.pop_back();
+            helper(res,path,n/i,i);
+            path.pop_back();
+            
+            }
+        }
+    }
+};
