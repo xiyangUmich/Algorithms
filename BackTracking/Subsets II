@@ -1,0 +1,40 @@
+Given a collection of integers that might contain duplicates, nums, return all possible subsets.
+
+Note:
+Elements in a subset must be in non-descending order.
+The solution set must not contain duplicate subsets.
+For example,
+If nums = [1,2,2], a solution is:
+
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+       sort(nums.begin(),nums.end());
+       vector<vector<int>> res;
+       vector<int> path;
+       res.push_back(path);
+       helper(res, path, 0, nums);
+       return res;
+    }
+    void helper(vector<vector<int>>& res, vector<int>& path, int start, vector<int>& nums){
+       
+        for( int i=start;i<nums.size();++i){
+            while(i!=start && i<nums.size() && nums[i]==nums[i-1]) ++i;
+            if(i<nums.size()){
+            path.push_back(nums[i]);
+            res.push_back(path);
+            helper(res, path, i+1, nums);
+            path.pop_back();
+            }
+        }
+    }
+};
