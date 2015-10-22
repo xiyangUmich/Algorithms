@@ -1,0 +1,41 @@
+Implement an iterator to flatten a 2d vector. 
+
+For example,
+ Given 2d vector = 
+[
+  [1,2],
+  [3],
+  [4,5,6]
+]
+
+class Vector2D {
+    private: vector<vector<int>> v2d;
+             int x;
+             int y;
+             
+public:
+    Vector2D(vector<vector<int>>& vec2d) {
+        v2d = vec2d;
+        x=0;
+        y=0;
+    }
+
+    int next() {
+        return v2d[x][y++];
+        
+    }
+
+    bool hasNext() {
+        while(x<v2d.size() && v2d[x].size()==y){
+            y=0;
+            ++x;
+        }
+        return x<v2d.size();
+    }
+};
+
+/**
+ * Your Vector2D object will be instantiated and called as such:
+ * Vector2D i(vec2d);
+ * while (i.hasNext()) cout << i.next();
+ */
