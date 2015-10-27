@@ -1,0 +1,43 @@
+Given a string s, return all the palindromic permutations (without duplicates) of it. Return an empty list if no palindromic permutation could be form. 
+
+For example: 
+
+Given s = "aabb", return ["abba", "baab"]. 
+
+Given s = "abc", return []. 
+
+Hint:
+ 1.If a palindromic permutation exists, we just need to generate the first half of the string.
+2.To generate all distinct permutations of a (half of) string, use a similar approach from: Permutations II or Next Permutation
+
+class Solution {
+public:
+
+    vector<string> generatePalindromes(string s) {
+        unordered_map<char,int> map;
+        vector<string> res;
+        string st;
+        int countOdd=0;
+        char odd;
+        
+        for(auto c: s)
+            ++map[c];
+        for(auto pair: map){
+           st+=string(pair.second/2,pair.first);   //a constructor of string-> combine chars into a string
+           if(pair.second%2==1){   //or pair.second&1
+              ++countOdd;
+              odd=pair.first;
+           }
+           if(countOdd==2) return res;
+           
+        }
+        
+        sort(st.begin(),st.end());
+        
+        do{
+            res.push_back(st+(countOdd==0?"":string(1,odd))+string(st.rbegin(),st.rend()));  //copy a string by reversed seq
+        }while(next_permutation(st.begin(),st.end()));     //get next permutation of a vector
+       
+        return res;
+    }
+};
