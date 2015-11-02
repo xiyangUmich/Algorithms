@@ -1,0 +1,35 @@
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+    For example, given array S = {-1 2 1 -4}, and target = 1.
+
+    The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+class Solution {
+private:
+    int sum=0;
+    int num=0;
+    int res=0;
+    int diff=INT_MAX;
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+      helper(num,0,sum,diff,res, nums,target);
+      return res;
+    }
+    void helper(int& num, int start, int& sum, int& diff, int& res, vector<int>& nums, int target){
+       
+         if(num==3){
+            if(abs(sum-target)<diff) {
+                diff=abs(sum-target);
+                res=sum;
+            }
+            return;
+        } 
+        for(int i=start;i<nums.size();++i){
+         
+        sum+=nums[i];
+        ++num;
+        helper(num,i+1,sum,diff,res,nums,target);
+        --num;
+        sum-=nums[i];
+        }
+    }
+};
