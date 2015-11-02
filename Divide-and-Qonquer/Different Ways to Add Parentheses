@@ -1,0 +1,43 @@
+Given a string of numbers and operators, return all possible results from computing all the different possible ways to group numbers and operators. The valid operators are +, - and *.
+
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        vector<int> result;
+       if(input.size()==0) return result;
+       result=helper(input, 0, input.size()-1);
+       
+    }
+    vector<int> helper(string& input, int start, int end){
+        vector<int> res;
+        for(int i=start;i<=end;++i){
+            if(input[i]=='+' || input[i]=='-' || input[i]=='*'){
+                vector<int> left = helper(input, start, i-1);
+                vector<int> right = helper(input, i+1, end);
+                for(auto l: left){
+                    for(auto r: right){
+                        switch(input[i]){
+                            case '+':
+                                res.push_back(l+r);
+                                break;
+                            
+                            case '-':
+                                res.push_back(l-r);
+                                break;
+                            
+                            case '*':
+                                res.push_back(l*r);
+                                break;
+                        }     
+                    }
+                }
+            }
+            
+        }
+        if(res.size()==0){
+            string s=string(input, start, end-start+1);
+            res.push_back(atoi(s.c_str()));
+        } 
+        return res;
+    }
+};
