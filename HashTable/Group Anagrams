@@ -1,0 +1,32 @@
+Given an array of strings, group anagrams together. 
+
+For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"], 
+ Return: 
+[
+  ["ate", "eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> res(strs.size(),vector<string>());
+        unordered_map<string,int> map;
+        
+        sort(strs.begin(),strs.end());
+        int row=0;
+        for(int i=0;i<strs.size();++i){
+            string s=strs[i];
+            sort(s.begin(),s.end());
+            if(map.find(s)==map.end())
+                map[s]=row++;
+                res[map[s]].push_back(strs[i]);
+        }
+        int i=0;
+        while(i<res.size() && !res[i].empty()) ++i;
+        if(i!=res.size()) res.erase(res.begin()+i,res.end());
+        sort(res.begin(),res.end());
+        return res;
+    }
+};
