@@ -1,0 +1,22 @@
+Given an array of integers, find out whether there are two distinct indices i and j in the array such that the difference between nums[i] and nums[j] is at most t and the difference between i and j is at most k. 
+
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+         multimap<long,int> map;   //could save diff values with a same key
+         for(int i=0;i<nums.size();++i)
+            map.insert(pair<long,int>(nums[i],i)); //using pair, to get the key and value easily
+        
+        auto pi=map.begin();
+        while(pi!=map.end()){
+             auto pj=pi;
+             pj++;
+             while(pj!=map.end() && pj->first-pi->first<=t) {  //diff may be long, so using long
+              if(abs(pi->second-pj->second)<=k) return true;
+              pj++;
+             }
+              ++pi;
+         }
+         return false;
+    }
+};
