@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int mySqrt(int x) {
+        long long mid;
+       long long small=0, big=x;
+       while(small<=big){
+           if(big==INT_MAX) mid=small/2 + big/2;
+           else mid = (small + big)/2;
+           if(mid*mid == x) return mid;
+           else if(mid*mid > x){
+               if((mid-1)*(mid-1)<x) return (mid-1);
+               else big = mid - 1;
+           } 
+           else if(mid*mid<x){
+               if((mid+1)*(mid+1)>x) return mid;
+           else small = mid+1;
+           }
+       }
+    }
+};
