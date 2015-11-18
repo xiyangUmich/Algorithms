@@ -13,7 +13,7 @@ public:
      for(int i=a.size()-1, j=b.size()-1; i>=0 || j>=0; --i, --j){
          int m = i>=0? a[i]-'0':0;
          int n = j>=0? b[j]-'0':0;
-         res= to_string((m+n+mark)&0x1) +res;
+         res= to_string((m+n+mark)&0x1) +res;  0&0=0, 1&1=1;
          mark = (m+n+mark)>>1;
      }
      return mark==1?"1"+res:res;
