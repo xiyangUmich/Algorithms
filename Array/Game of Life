@@ -1,0 +1,46 @@
+According to the Wikipedia's article: "The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970." 
+
+Given a board with m by n cells, each cell has an initial state live (1) or dead (0). Each cell interacts with its eight neighbors (horizontal, vertical, diagonal) using the following four rules (taken from the above Wikipedia article): 
+
+
+1.Any live cell with fewer than two live neighbors dies, as if caused by under-population.
+2.Any live cell with two or three live neighbors lives on to the next generation.
+3.Any live cell with more than three live neighbors dies, as if by over-population..
+4.Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+
+
+Write a function to compute the next state (after one update) of the board given its current state.
+
+class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board) {
+        int m=board.size();
+        int n=board[0].size();
+        vector<vector<int>> record(m, vector<int>(n,0));
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j){
+                int count=0;
+                int curr=board[i][j];
+                if(i>0 && j>0) count=count+board[i-1][j-1]+record[i-1][j-1];
+                if(i>0) count=count+board[i-1][j]+record[i-1][j];
+                if(i>0 && j<n-1) count=count+board[i-1][j+1]+record[i-1][j+1];
+                if(j>0) count=count+board[i][j-1]+record[i][j-1];
+                if(j<n-1) count=count+board[i][j+1];
+                if(i<m-1 && j>0) count=count+board[i+1][j-1];
+    
+                if(i<m-1) count=count+board[i+1][j];
+                if(i<m-1 && j<n-1) count=count+board[i+1][j+1];
+                
+                if(curr==1 && (count<2 || count>3)){
+                    record[i][j]=1;
+                    board[i][j]=0;
+                }
+                
+                if(curr==0 && count==3){
+                    board[i][j]=1;
+                    record[i][j]=-1;
+                }
+            }
+        
+    }
+};
