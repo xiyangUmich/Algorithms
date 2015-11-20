@@ -1,0 +1,36 @@
+Given inorder and postorder traversal of a tree, construct the binary tree.
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+      
+        return helper(inorder,postorder,0,inorder.size()-1,0,postorder.size()-1);
+        
+        
+    }
+    TreeNode* helper(vector<int>& inorder, vector<int>& postorder, int bin, int ein, int bp, int ep){
+       //TreeNode* root1 = new TreeNode(inorder.size()-1);
+        if(bin>ein) return NULL;
+        
+        //if(bin==ein) return root;
+        TreeNode* root = new TreeNode(postorder[ep]);
+        int index=-1;
+        for(int i=bin;i<=ein;++i){
+            if(inorder[i]==postorder[ep]){
+                index=i;
+                break;
+            }
+        }
+        root->left=helper(inorder,postorder,bin,index-1,bp,bp+(index-1-bin));
+        root->right=helper(inorder,postorder,index+1,ein,ep-1-(ein-index-1),ep-1);
+        return root;
+    }
+};
