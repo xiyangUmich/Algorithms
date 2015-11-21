@@ -1,0 +1,30 @@
+Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+For example, given
+s = "leetcode",
+dict = ["leet", "code"].
+
+Return true because "leetcode" can be segmented as "leet code".
+
+class Solution {
+public:
+    bool wordBreak(string s, unordered_set<string>& wordDict) {
+        vector<bool> visited(s.size(),false);
+        return helper(0, visited, s, wordDict);
+       
+    }
+    bool helper(int start,vector<bool>& visited, string& s, unordered_set<string>& wordDict){
+        if(start==s.size()) return true;
+        if(visited[start]) return false;
+        visited[start]=true;
+        
+       for(int i=0;i+start<s.size();++i){
+            if(wordDict.count(string (s,start,i+1))>0 && helper(start+i+1, visited, s, wordDict)==true)
+                return true;
+           
+        }
+       
+        return false;
+       
+    }
+};
