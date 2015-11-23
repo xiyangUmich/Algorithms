@@ -1,0 +1,76 @@
+Given an integer array nums, find the sum of the elements between indices i and j (i ≤ j), inclusive.
+The update(i, val) function modifies nums by updating the element at index i to val. 
+Example:
+
+Given nums = [1, 3, 5]
+
+sumRange(0, 2) -> 9
+update(1, 2)
+sumRange(0, 2) -> 8
+
+class NumArray {
+    struct segmentTreeNode{
+        int start, end, sum;
+        segmentTreeNode* left;
+        segmentTreeNode* right;
+        segmentTreeNode(int a, int b):start(a), end(b), sum(0), left(nullptr), right(nullptr){}
+    };
+    segmentTreeNode* root;
+public:
+    NumArray(vector<int> &nums) {
+        int n=nums.size();
+      root = buildTree(nums, 0, n-1);
+        
+    }
+
+    void update(int i, int val) {
+        modifyTree(root, i, val);
+    }
+
+    int sumRange(int i, int j) {
+        return queryTree(root, i, j);
+    }
+    segmentTreeNode* buildTree(vector<int> &nums, int start, int end){
+        if(start>end) return nullptr;
+        segmentTreeNode* root = new segmentTreeNode(start, end);
+        if(start==end){
+            root->sum = nums[start];
+            return root;
+        }
+        int mid = start+(end-start)/2;
+        root->left = buildTree(nums, start, mid);
+        root->right = buildTree(nums, mid+1, end);
+        root->sum = root->left->sum + root->right->sum;
+        return root;
+    }
+    int modifyTree(segmentTreeNode *root, int i, int val){
+        if(root == nullptr) return 0;
+      int diff;
+        if(root->start==i && root->end ==i){
+            diff = val-root->sum;
+            root->sum=val;
+            return diff;
+        }
+        int mid= (root->start + root->end)/2;
+        if(mid<i) diff= modifyTree(root->right, i, val);
+        else diff= modifyTree(root->left, i ,val); 
+        root->sum +=diff;
+        return diff;
+    }
+    int queryTree(segmentTreeNode* root, int i, int j){
+        if(root ==nullptr) return 0;
+        if(root->start ==i && root->end == j) return root->sum;
+        int mid = (root->start + root->end)/2;
+        if(mid<i) return queryTree(root->right, i,j);
+        else if(mid>=j) return queryTree(root->left, i, j);
+        else return queryTree(root->left, i, mid) + queryTree(root->right, mid+1, j);
+    }
+    
+};
+
+
+// Your NumArray object will be instantiated and called as such:
+// NumArray numArray(nums);
+// numArray.sumRange(0, 1);
+// numArray.update(1, 10);
+// numArray.sumRange(1, 2);
