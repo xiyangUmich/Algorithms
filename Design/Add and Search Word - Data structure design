@@ -1,0 +1,36 @@
+For example:
+
+addWord("bad")
+addWord("dad")
+addWord("mad")
+search("pad") -> false
+search("bad") -> true
+search(".ad") -> true
+search("b..") -> true
+
+class WordDictionary {
+    unordered_map<int,unordered_set<string>> words;
+public:
+    WordDictionary(){}
+    // Adds a word into the data structure.
+    void addWord(string word) {
+        int n=word.size();
+        words[n].insert(word);
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    bool search(string word) {
+       int n=word.size();
+       for(auto w:words[n]){
+           if(word==w) return true;
+           int i=0;
+           while(i<n){
+               if(word[i]=='.' || word[i]==w[i]) ++i;
+               else break;
+           }
+           if(i==n) return true;
+       }
+       return false;
+    }
+};
