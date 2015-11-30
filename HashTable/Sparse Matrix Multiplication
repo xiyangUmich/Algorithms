@@ -1,0 +1,57 @@
+EGiven two sparse matrices A and B, return the result of AB.
+
+You may assume that A's column number is equal to B's row number.
+
+Example:
+A = [
+  [ 1, 0, 0],
+  [-1, 0, 3]
+]
+
+B = [
+  [ 7, 0, 0 ],
+  [ 0, 0, 0 ],
+  [ 0, 0, 1 ]
+]
+
+
+     |  1 0 0 |   | 7 0 0 |   |  7 0 0 |
+AB = | -1 0 3 | x | 0 0 0 | = | -7 0 3 |
+                  | 0 0 1 |
+
+
+class Solution {
+public:
+    vector<vector<int>> multiply(vector<vector<int>>& A, vector<vector<int>>& B) {
+        int n = A.size();
+        int m = B.size();
+        int c = B[0].size();
+        vector<vector<int>> res(n, vector<int>(c,0));
+       
+        vector<int> nonZeroA;
+        vector<int> nonZeroB;
+        
+        for(int i=0;i<n;++i)
+            for(int j=0;j<m;++j)
+                if(A[i][j]!=0){
+                    nonZeroA.push_back(i);
+                    break;
+                }
+        for(int i=0;i<c;++i)
+            for(int j=0;j<m;++j)
+                if(B[j][i]!=0){
+                     nonZeroB.push_back(i);
+                    break;
+                }
+     
+        for(auto a:nonZeroA)
+            for(auto b:nonZeroB){
+                int temp=0;
+                for(int i=0;i<m;++i)
+                    temp+=A[a][i]*B[i][b];
+            res[a][b]=temp;
+            }
+        return res;
+        
+    }
+};
