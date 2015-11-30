@@ -1,0 +1,83 @@
+Given a 2D board and a word, find if the word exists in the grid. 
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once. 
+
+For example,
+ Given board = 
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size();
+        if(m==0) return false;
+        int n = board[0].size();
+        //unordered_map<char,vector<pair<int,int>>> map;
+        stack<pair<int,int>> s;
+        vector<pair<int,int>> v;
+        vector<vector<bool>> invited(m,vector<bool>(n,false));
+        
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j){
+                if(board[i][j]==word[0])
+                 v.push_back(make_pair(i,j));
+            }
+         //if(v.size()==0) return false;
+         
+        for(auto w:v){
+           s.push(w); 
+           invited[w.first][w.second]=true;
+          if(helper(board,word,s,1,invited)) return true;
+          invited[w.first][w.second]=false;
+           s.pop();
+        }
+        
+        return false;
+        
+    }
+     bool helper(vector<vector<char>>& board, string &word, stack<pair<int,int>> &s, int index, vector<vector<bool>> &invited){
+        if(index == word.size()) return true;
+        auto temp = s.top();
+        int i = temp.first;
+        int j = temp.second;
+        if(i>0 && board[i-1][j]==word[index] && invited[i-1][j]==false){
+	    invited[i-1][j]=true;
+            s.push(make_pair(i-1,j));
+            if(helper(board,word,s,index+1,invited)) return true;
+	    s.pop();
+	    invited[i-1][j]=false;
+        }
+        if(j>0 && board[i][j-1]==word[index] && invited[i][j-1]==false){
+	    invited[i][j-1]=true;
+            s.push(make_pair(i,j-1));
+            if(helper(board,word,s,index+1,invited)) return true;
+	    s.pop();
+	    invited[i][j-1]=false;
+        }
+
+        if(i<board.size()-1 && board[i+1][j]==word[index] && invited[i+1][j]==false){
+	    invited[i+1][j]=true;
+            s.push(make_pair(i+1,j));
+            if(helper(board,word,s,index+1,invited)) return true;
+	    s.pop();
+	    invited[i+1][j]=false;
+        }
+        if(j<board[0].size()-1 && board[i][j+1]==word[index] && invited[i][j+1]==false){
+            invited[i][j+1]=true;
+            s.push(make_pair(i,j+1));
+            if(helper(board,word,s,index+1,invited)) return true;
+	    s.pop();
+	    invited[i][j+1]=false;
+        }
+	return false;
+    }
+    
+};
