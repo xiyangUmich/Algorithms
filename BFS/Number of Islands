@@ -1,0 +1,70 @@
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example 1:
+
+11110
+11010
+11000
+00000
+Answer: 1
+
+Example 2:
+
+11000
+11000
+00100
+00011
+Answer: 3
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        if(m==0) return 0;
+        int n = grid[0].size();
+        vector<vector<bool>> visited(m,vector<bool>(n,false));
+        vector<pair<int, int>> ones;
+        int count=0;
+        stack<pair<int, int>> st;
+        
+        for(int i=0;i<m;++i)
+         for(int j=0;j<n;++j)
+          if(grid[i][j]=='1') ones.push_back(make_pair(i,j));
+          
+         for(auto p:ones){
+             if(visited[p.first][p.second]==false){
+                 int i = p.first;
+                 int j = p.second;
+                 visited[i][j]=true;
+                 
+                 st.push(p);
+                 while(!st.empty()){
+                     
+                     auto temp = st.top();
+                     st.pop();
+                     int r = temp.first;
+                     int c = temp.second;
+                     if(r>0 && grid[r-1][c]=='1' && visited[r-1][c]==false){
+                         st.push(make_pair(r-1,c));
+                         visited[r-1][c]=true;
+                     }
+                     if(c>0 && grid[r][c-1]=='1' && visited[r][c-1]==false){
+                         st.push(make_pair(r,c-1));
+                         visited[r][c-1]=true;
+                     }
+                      if(r<m-1 && grid[r+1][c]=='1' && visited[r+1][c]==false){
+                         st.push(make_pair(r+1,c));
+                         visited[r+1][c]=true;
+                     }
+                     if(c<n-1 && grid[r][c+1]=='1' && visited[r][c+1]==false){
+                         st.push(make_pair(r,c+1));
+                         visited[r][c+1]=true;
+                     }
+                     
+                 }
+                 ++count;
+             }
+         }
+         return count;
+    }
+};
