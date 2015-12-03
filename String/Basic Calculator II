@@ -1,0 +1,66 @@
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . The integer division should truncate toward zero.
+
+You may assume that the given expression is always valid.
+
+Some examples:
+
+"3+2*2" = 7
+" 3/2 " = 1
+" 3+5 / 2 " = 5
+
+class Solution {
+public:
+    int calculate(string s) {
+    vector<int> v1;
+    vector<int> v2;
+    vector<char> op;
+    int res=0;
+    int i=0;
+    while(i<s.size()){
+      if(s[i]==' ') ++i;
+      else if(isdigit(s[i])){
+          int temp=0;
+          while(i<s.size() && isdigit(s[i]))
+           temp = temp*10 + (s[i++]-'0');
+           v1.push_back(temp);
+      }
+      else op.push_back(s[i++]);
+    }
+    if(op.size()==0) return v1[0];
+    int m=0, n=0;
+    while(m<v1.size() && n<op.size()){
+        if(op[n]=='+' ||op[n]=='-') {
+            v2.push_back(v1[m++]);
+            ++n;
+        }
+        else {
+            int temp=v1[m++];
+            while(n<op.size() &&op[n]=='*' || op[n]=='/'){
+               if(op[n]=='*'){
+                   temp = temp*v1[m++];
+                   ++n;
+               } 
+               else{
+                   temp = temp/v1[m++];
+                   ++n;
+               }
+            }
+            v2.push_back(temp);
+            ++n;
+        }
+        if(n==op.size()) v2.push_back(v1[v1.size()-1]);
+    }
+    
+    res = v2[0];
+    m=1;
+    n=0;
+    while(m<v2.size() && n<op.size()){
+        if(op[n]=='+') res+=v2[m++];
+        else if(op[n]=='-') res-=v2[m++];
+        ++n;
+    }
+    return res;
+    }
+};
