@@ -1,0 +1,40 @@
+Given a binary tree, find the length of the longest consecutive sequence path. 
+The path refers to any sequence of nodes from some starting node to any node in the tree along the parent-child connections. 
+The longest consecutive path need to be from parent to child (cannot be the reverse). 
+
+int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int longestConsecutive(TreeNode* root) {
+        if(root==NULL) return 0;
+        int maxLength = 1;
+        helper(root, 1, maxLength);
+        return maxLength;
+    }
+    void helper(TreeNode* root, int currLength, int &maxLength){
+        if(root->right!=NULL){
+            if(root->right->val==root->val+1)
+               helper(root->right, currLength+1,maxLength);
+             else{
+                 maxLength = max(currLength, maxLength);
+                 helper(root->right, 1, maxLength);
+             }
+                
+        }
+        if(root->left != NULL){
+           if(root->left->val == root->val+1)
+            helper(root->left, currLength+1, maxLength);
+        else{
+            maxLength = max(currLength, maxLength);
+            helper(root->left, 1, maxLength);
+        }
+        }
+        else if(root->left==NULL && root->right==NULL)
+            maxLength = max(currLength, maxLength);
+    }
+};
