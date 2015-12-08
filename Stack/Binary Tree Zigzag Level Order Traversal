@@ -1,0 +1,76 @@
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+ Given binary tree {3,9,20,#,#,15,7},
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+
+
+return its zigzag level order traversal as:
+
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+ void helper(stack<TreeNode*> &s, vector<vector<int>>& res, bool wasInOrder){
+        stack<TreeNode*> s2;
+        vector<int> v;
+        while(!s.empty()){
+            TreeNode* temp = s.top();
+            s.pop();
+            if(wasInOrder){
+                if(temp->right!=NULL){
+                    s2.push(temp->right);
+                    v.push_back(temp->right->val);
+                } 
+                 if(temp->left!=NULL){
+                    s2.push(temp->left);
+                    v.push_back(temp->left->val);
+                } 
+            }
+            else{
+               if(temp->left!=NULL){
+                    s2.push(temp->left);
+                    v.push_back(temp->left->val);
+                }  
+                if(temp->right!=NULL){
+                    s2.push(temp->right);
+                    v.push_back(temp->right->val);
+                } 
+            }
+        }
+    if(!v.empty()){
+        res.push_back(v);
+        helper(s2, res, !wasInOrder);
+        }
+    }
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if(root==NULL) return res;
+        stack<TreeNode*> s;
+        s.push(root);
+        vector<int> v(1,root->val);
+        res.push_back(v);
+        helper(s,res,true);
+        return res;
+    }
+   
+};
