@@ -13,7 +13,7 @@ public:
         for(int i=minLength;start+i-1<num.size();++i){
             string temp = num.substr(start,i);
             if(isNonLegal(temp)) break;
-            if(stoll(s1)+stoll(s2)==stoll(temp) && helper(start+i,i,s2,temp,num)) return true;
+            if(stoll(s1)+stoll(s2)==stoll(temp) && helper(start+i,i,s2,temp,num)) return true; //stoll(str) string to int
         }
         return false;
     }
