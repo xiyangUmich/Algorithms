@@ -1,0 +1,33 @@
+Additive number is a string whose digits can form additive sequence.
+
+A valid additive sequence should contain at least three numbers. Except for the first two numbers, each subsequent number in the sequence must be the sum of the preceding two.
+
+class Solution {
+public:
+    bool isNonLegal(string s){
+        return s[0]=='0' &&s.size()!=1;
+    }
+    bool helper(int start, int minLength, string s1, string s2, string& num){
+        if(start==num.size()) return true;
+        if(num.size()-start<minLength) return false;
+        for(int i=minLength;start+i-1<num.size();++i){
+            string temp = num.substr(start,i);
+            if(isNonLegal(temp)) break;
+            if(stoll(s1)+stoll(s2)==stoll(temp) && helper(start+i,i,s2,temp,num)) return true;
+        }
+        return false;
+    }
+    bool isAdditiveNumber(string num) {
+        for(int i=0;i<num.size()/2;++i){
+            string s1 = num.substr(0,i+1);
+            if(isNonLegal(s1)) break;
+            for(int j=1;j<=(num.size()-i-1)/2;++j){
+                string s2 = num.substr(i+1,j);
+                if(isNonLegal(s2)) break;
+                if(helper(i+j+1,max(i+1,j),s1,s2,num)) return true;
+            }
+        }
+        return false;
+    }
+    
+};
