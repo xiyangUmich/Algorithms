@@ -1,0 +1,44 @@
+Given two numbers represented as strings, return multiplication of the numbers as a string.
+
+Note: The numbers can be arbitrarily large and are non-negative.
+
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+         vector<string> rec(num2.size(), string());
+        string res;
+        int i=0;
+        for(int n2=num2.size()-1;n2>=0;--n2){
+            for(int j=0;j<i;++j) rec[i].push_back('0');
+            int mark =0;
+            for(int n1=num1.size()-1;n1>=0;--n1){
+                int temp = (num2[n2]-'0')*(num1[n1]-'0')+mark;
+                mark = temp/10;
+                temp = temp%10;
+                rec[i].push_back('0'+temp);
+            }
+            if(mark>0) rec[i].push_back('0'+mark);
+            ++i;
+        }
+        
+        int mark=0;
+        for(int i=0;i<rec[rec.size()-1].size();++i){
+            int temp =0;
+            for(int j=0;j<rec.size();++j)
+                if(rec[j].size()>i) temp = temp+(rec[j][i]-'0');
+            temp = temp+mark;
+            mark=temp/10;
+            temp=temp%10;
+            res.push_back('0'+temp);
+                
+        }
+        if(mark>0) res.push_back('0'+mark);
+        reverse(res.begin(),res.end());
+       
+        while(res.size()>1 && res[0]=='0') 
+            res.erase(res.begin());
+            
+        return res;
+        
+    }
+};
