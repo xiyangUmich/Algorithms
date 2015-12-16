@@ -1,0 +1,52 @@
+Given an absolute path for a file (Unix-style), simplify it.
+
+For example,
+path = "/home/", => "/home"
+path = "/a/./b/../../c/", => "/c"
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+        stack<char> st;
+        string res;
+        int i=0;
+        while(i<path.size()){
+            if(path[i]!='.' && path[i]!='/')
+                st.push(path[i++]);
+            else if(path[i]=='/'){
+                if(st.empty() || (!st.empty() && st.top()!='/')) st.push(path[i++]);
+                else if(st.top()=='/') ++i;
+            }
+            else if(path[i]=='.'){
+                int count=0;
+                while(i<path.size() && path[i]=='.'){
+                    count++;
+                    ++i;
+                }
+               
+                if(count>=3 ||(i<path.size() && (path[i]!='.' && path[i]!='/')) ||st.empty())
+                    for(int j=1;j<=count;++j) st.push('.');
+                
+                else if(count==1) ++i;
+              
+                else if(count==2){
+                        st.pop();
+                        if(!st.empty()){
+                          while(!st.empty() && st.top()!='/') st.pop();
+                          st.pop();
+                       }
+                }
+            }
+        }
+        if(st.size()>1 &&st.top()=='/') st.pop();
+       
+        while(!st.empty()) {
+            res.push_back(st.top());
+            st.pop();
+        }
+        if(res.size()==0) return "/";
+        reverse(res.begin(), res.end());
+        return res;
+        
+    }
+};
