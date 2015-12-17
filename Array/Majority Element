@@ -20,3 +20,22 @@ public:
        }
     }
 };
+
+Method II.
+int majorityElement1(vector<int>& nums) {
+    sort(nums.begin(), nums.end());
+    return nums[nums.size()/2];
+}
+Method II:
+int majorityElement(vector<int>& nums) {
+    int count=0, ret=0;
+    for (auto& num: nums) {
+        if (count == 0)
+            ret = num;
+        if (num != ret)
+            count--;
+        else
+            count++;
+    }
+    return ret;
+}
