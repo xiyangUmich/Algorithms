@@ -27,3 +27,19 @@ public:
        
     }
 };
+
+//Method 2
+class Solution {
+public:
+    int findCelebrity(int n) {
+        int i=0,j;
+        while(i<n){
+            j=0;
+            while((j<n && knows(j,i) &&!knows(i,j)) ||j==i) ++j;
+            
+            if(j==n) return i;
+            i=max(i+1,j);
+        }
+        return -1;
+    }
+};
