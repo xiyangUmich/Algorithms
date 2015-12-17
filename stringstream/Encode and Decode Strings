@@ -1,0 +1,33 @@
+Design an algorithm to encode a list of strings to a string. The encoded string is then sent over the network and is decoded back to the original list of strings.
+
+class Codec {
+public:
+
+    // Encodes a list of strings to a single string.
+    string encode(vector<string>& strs) {
+       stringstream s;
+       for(int i=0;i<static_cast<int>(strs.size());++i){
+           s<<setfill('0')<<setw(20)<<strs[i].size();
+           s<<strs[i];
+       }
+       return s.str();
+    }
+
+    // Decodes a single string to a list of strings.
+    vector<string> decode(string s) {
+      vector<string> res;
+      int i=0;
+      while(i<=static_cast<int>(s.size())-20){
+          stringstream ss(s.substr(i,20));
+          int len;
+          ss>>len;
+          i+=20;
+          if(len>0)
+              res.push_back(s.substr(i,len));
+              
+          else res.push_back(string(""));
+          i+=len;
+      }
+      return res;
+    }
+};
