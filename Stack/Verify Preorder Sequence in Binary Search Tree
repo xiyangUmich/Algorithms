@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool verifyPreorder(vector<int>& preorder) {
+       if(preorder.size()<=2) return true;
+       int currRoot=INT_MIN;
+       stack<int> s;
+       s.push(preorder[0]);
+       int i=1;
+       while(i<preorder.size()){
+           if(s.empty() || preorder[i]<preorder[i-1]) {
+               if(preorder[i]<currRoot) return false;
+               s.push(preorder[i++]);
+           }
+           else{
+               while(!s.empty()&&preorder[i]>s.top()){
+                   currRoot=s.top();
+                   s.pop();
+               } 
+               s.push(preorder[i++]);
+           }
+       }
+      return true;
+}
+};
