@@ -21,3 +21,21 @@ public:
         return result;
     }
 };
+
+Method 2.
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if(numRows==1) return s;
+        vector<string> v(numRows);
+        string res;
+        int n=numRows+numRows-2;
+        for(int i=0;i<s.size();++i){
+            int l=i%n;
+            if(l>=numRows) l=n-l;
+            v[l].push_back(s[i]);
+        }
+        for(auto s:v) res=res+s;;
+        return res;
+    }
+};
