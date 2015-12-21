@@ -1,0 +1,12 @@
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        if(s.size()<=1) return true;
+        for(auto begin=s.begin(), end =s.end()-1;begin<end;++begin,--end){
+            while(begin<end && !isalnum(*begin)) ++begin;
+            while(begin<end && !isalnum(*end)) --end;
+            if(tolower(*begin)!=tolower(*end)) return false;
+        }
+           return true;
+    }
+};
