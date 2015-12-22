@@ -50,3 +50,26 @@ public:
         
     }
 };
+
+//Method II
+class Solution {
+public:
+    string simplifyPath(string path) {
+        stack<string> st;
+        string res;
+        
+        for(int i=0;i<path.size();++i)
+            if(path[i]!='/'){
+            string temp;
+            while(i<path.size() && path[i]!='/') temp.push_back(path[i++]);
+            if(temp!="." && temp!="..") st.push(temp);
+            else if(temp==".." && !st.empty()) st.pop();
+            }
+        while(!st.empty()){
+           res='/'+st.top()+res;
+            st.pop();
+        }
+       
+        return res.size()>0?res: "/";
+    }
+};
