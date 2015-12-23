@@ -1,0 +1,29 @@
+Write a function to generate the generalized abbreviations of a word.
+
+Example:
+Given word = "word", return the following list (order does not matter):
+["word", "1ord", "w1rd", "wo1d", "wor1", "2rd", "w2d", "wo2", "1o1d", "1or1", "w1r1", "1o2", "2r1", "3d", "w3", "4"]
+
+class Solution {
+public:
+    vector<string> generateAbbreviations(string word) {
+        vector<string> res;
+        res.push_back(word);
+        helper(res,0,word);
+        return res;
+    }
+    void helper(vector<string> &res, int start, string word){
+       if(start>=word.size()) return;
+       int l=word.size()-start;
+       for(int n=1;n<=l;++n)
+           for(int i=start;i<=word.size()-n;++i){
+               string temp=word.substr(0,i);
+               string num=to_string(n);
+               temp+=num;
+               if(i+n<word.size()) temp+=word.substr(i+n,word.size()-(i+n));
+               res.push_back(temp);
+               helper(res,i+num.size()+1,temp);
+           }
+       
+    }
+};
