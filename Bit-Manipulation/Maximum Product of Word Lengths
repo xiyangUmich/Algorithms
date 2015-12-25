@@ -1,0 +1,36 @@
+Given a string array words, find the maximum value of length(word[i]) * length(word[j]) where the two words do not share common letters. You may assume that each word will contain only lower case letters. If no such two words exist, return 0.
+
+Example 1:
+Given ["abcw", "baz", "foo", "bar", "xtfn", "abcdef"]
+Return 16
+The two words can be "abcw", "xtfn".
+
+class Solution {
+public:
+    static bool sortFunction(string s1, string s2){
+        return s1.size()<s2.size();
+    }
+    int strToBi(string s){
+        int res=0;
+        for(int i=0;i<s.length();++i)
+            res=res|(1<<(s[i]-97));
+        return res;
+    }
+    int maxProduct(vector<string>& words) {
+       sort(words.begin(),words.end(),sortFunction);
+       int res=0;
+       vector<int> v(words.size(),0);
+       for(int i=0;i<words.size();++i) v[i]=strToBi(words[i]);
+       for(int l=0,r=words.size()-1;l<r;--r){
+           int ind=-1;
+           while(l<r){
+           if(!(v[l]&v[r])) ind=l;
+           ++l;
+           }
+           if(ind!=-1) res=max(res,(int)words[ind].size()*(int)words[r].size());
+           l=ind+1;
+       }
+       return res;
+    }
+    
+};
