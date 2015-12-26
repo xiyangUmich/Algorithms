@@ -26,3 +26,21 @@ public:
         return diff;
     }
 };
+
+Method II
+class Solution {
+public:
+    int shortestWordDistance(vector<string>& words, string word1, string word2) {
+        int s1=-1, s2=-1;
+        int dis = words.size();
+        for(int i=0;i<words.size();++i){
+            if(words[i]==word1) {
+                if(word2==word1) s2=s1;
+                s1=i;
+            }
+            if(word2!= word1 && words[i]==word2) s2=i;
+            if(s1!=-1 && s2!=-1) dis = min(dis, abs(s1-s2));
+        }
+        return dis;
+    }
+};
