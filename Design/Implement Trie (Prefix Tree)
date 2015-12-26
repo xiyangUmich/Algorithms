@@ -1,0 +1,57 @@
+Implement a trie with insert, search, and startsWith methods.
+
+class Trie {
+    struct TrieNode{
+      public:
+      unordered_map<char, TrieNode*> childrenTable;
+      int end;
+      TrieNode():end(0){}
+    };
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    void insert(string word) {
+        TrieNode* temp = root;
+        int i=0;
+        while(i<word.size()){
+            if(temp->childrenTable.find(word[i])==temp->childrenTable.end()) break;
+            temp = temp->childrenTable[word[i++]];
+        }
+        
+        while(i<word.size()){
+                TrieNode* newTemp = new TrieNode();
+                temp->childrenTable[word[i++]]=newTemp;
+                temp=newTemp;
+            }
+        temp->end=1;
+    }
+
+    // Returns if the word is in the trie.
+    bool search(string word) {
+        int i=0;
+        TrieNode* temp = root;
+         while(i<word.size()){
+            if(temp->childrenTable.find(word[i])==temp->childrenTable.end()) return false;
+            temp = temp->childrenTable[word[i++]];
+        }
+       return temp->end==1;
+    }
+
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    bool startsWith(string prefix) {
+        int i=0;
+        TrieNode* temp = root;
+         while(i<prefix.size()){
+            if(temp->childrenTable.find(prefix[i])==temp->childrenTable.end()) return false;
+            temp = temp->childrenTable[prefix[i++]];
+        }
+       return true;
+    }
+
+private:
+    TrieNode* root;
+};
