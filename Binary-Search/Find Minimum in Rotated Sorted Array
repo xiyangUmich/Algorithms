@@ -24,3 +24,4 @@ public:
     }
     
 };
+//From the minimunm number index, nums will grow bigger and bigger gradually to the right diraction.
