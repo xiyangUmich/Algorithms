@@ -38,3 +38,4 @@ public:
     }
     
 }
+//Find the minimum number location first, and then separate into two array
