@@ -1,0 +1,35 @@
+Given a binary search tree and a node in it, find the in-order successor of that node in the BST.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
+        if(p->right) return getMostLeft(p->right);
+        else return helper(NULL, root, p);
+    }
+    TreeNode* helper(TreeNode* preRoot, TreeNode* root, TreeNode* p){
+        while(root){
+        if(root==p ||root==NULL) return NULL;
+        if(root->val>p->val){
+           if(root->left!=NULL && root->left==p) return root;
+           return helper(root,root->left,p); 
+        }
+        else{
+            if(root->right!=NULL && root->right==p) return preRoot;
+            return helper(preRoot,root->right,p);
+        }
+      }
+    }
+    TreeNode* getMostLeft(TreeNode* root){
+        while(root->left) root=root->left;
+        return root;
+    }
+};
