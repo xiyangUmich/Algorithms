@@ -68,3 +68,64 @@ public:
          return count;
     }
 };
+
+Method II Union/Find
+class Solution {
+private:
+    vector<int> v;
+   
+    int find(int x){
+        while(x!=v[x]) x=v[x];
+        return x;
+    }
+  
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int m=grid.size();
+        if(m==0) return 0;
+        int n=grid[0].size();
+        int count=0;
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j)
+                if(grid[i][j]=='1') ++count;
+        
+        for(int i=0;i<m*n;++i) v.push_back(i);
+        
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j){
+                if(grid[i][j]=='0') continue;
+                int p = find(i*n+j);
+                if(i>0 && grid[i-1][j]=='1'){
+                    int q= find((i-1)*n+j);
+                    if(q!=p){
+                    --count;
+                    v[q]=p;
+                    }
+                }
+                if(j>0 &&grid[i][j-1]=='1'){
+                     int q=find(i*n+j-1);
+                 if(q!=p){
+                   --count;
+                   v[q]=p;
+                 }
+                }
+                if(i<m-1 && grid[i+1][j]=='1'){
+                    int q=find((i+1)*n+j);
+                    if(q!=p){
+                    --count;
+                    v[q]=p;
+                    }
+                }
+                  
+                if(j<n-1 &&grid[i][j+1]=='1'){
+                 int q = find(i*n+j+1);
+                 if(q!=p){
+                   --count;
+                   v[q]=p;
+                 }
+                }
+            }
+            return count;
+            
+    }
+};
