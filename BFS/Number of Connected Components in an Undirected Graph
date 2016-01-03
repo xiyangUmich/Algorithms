@@ -6,6 +6,7 @@ Example 1:
      1 --- 2    4
 Given n = 5 and edges = [[0, 1], [1, 2], [3, 4]], return 2.
 
+Method I: DFS
 class Solution {
 public:
     int countComponents(int n, vector<pair<int, int>>& edges) {
@@ -33,5 +34,30 @@ public:
             }
         }
         return res;
+    }
+};
+
+Method II: Union Find
+class Solution {
+private:
+    vector<int> v;
+    int find(int x){
+        int curr=x;
+        while(curr!=v[curr]) curr=v[curr];
+        return curr;
+    }
+public:
+    int countComponents(int n, vector<pair<int, int>>& edges) {
+        int count=n;
+        for(int i=0;i<n;++i) v.push_back(i);
+        for(auto e:edges){
+            int p = find(e.first);
+            int q = find(e.second);
+            if(p!=q){
+                count--;
+                v[q]=v[p];
+            } 
+        }
+        return count;
     }
 };
