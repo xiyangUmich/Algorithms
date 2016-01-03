@@ -22,3 +22,26 @@ public:
        return edges.size()==n-1;
     }
 };
+
+II;
+class Solution {
+private: 
+    vector<int> v;
+    int find(int x){
+        while(x!=v[x]) x=v[x];
+        return x;
+    }
+public:
+    bool validTree(int n, vector<pair<int, int>>& edges) {
+        int count=n;
+       for(int i=0;i<n;++i) v.push_back(i);
+       for(auto e:edges){
+           int x = find(e.first);
+           int y = find(e.second);
+           if(x==y) return false;
+           v[y]=v[x];
+           --count;
+       }
+       return count==1;
+    }
+};
