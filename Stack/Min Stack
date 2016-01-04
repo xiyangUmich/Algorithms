@@ -61,3 +61,31 @@ public:
        return minV[minV.size()-1];
     }
 };
+    Method III
+    class MinStack {
+private:
+    
+    stack<int> v;
+    stack<int> minNum;
+public:
+    
+    void push(int x) {
+      v.push(x); 
+      int num = minNum.empty()?x:min(minNum.top(),x);
+     
+      minNum.push(num);
+    }
+
+    void pop() {
+       v.pop(); 
+       minNum.pop();
+    }
+
+    int top() {
+       return v.top(); 
+    }
+
+    int getMin() {
+        return minNum.top();
+    }
+};
