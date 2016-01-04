@@ -23,3 +23,15 @@ public:
         return i>0?m*pow(2,i):m;
     }
 };
+
+Method II
+class Solution {
+public:
+    int rangeBitwiseAnd(int m, int n) {
+        int res=0;
+        int i=0;
+        while(m && n && m!=n) {++i;m=m>>1;n=n>>1;}
+        if(m==n) return (m&n)<<i;
+        else return 0;
+    }
+};
