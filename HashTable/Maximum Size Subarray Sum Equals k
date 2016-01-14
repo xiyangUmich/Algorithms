@@ -1,0 +1,23 @@
+Given an array nums and a target value k, find the maximum length of a subarray that sums to k. If there isn't one, return 0 instead. 
+
+Example 1:
+
+
+Given nums = [1, -1, 5, -2, 3], k = 3,
+ return 4. (because the subarray [1, -1, 5, -2] sums to 3 and is the longest) 
+
+class Solution {
+public:
+int maxSubArrayLen(vector<int>& nums, int k){
+    unordered_map<int,int> sums;
+    int currSum = 0;
+    int maxLength = 0;
+    for(int i=0;i<nums.size();++i){
+        currSum += nums[i];
+        if(currSum == k) maxLength = i+1;
+        else if(sums.find(currSum-k)!=sums.end()) maxLength = max(maxLength, i-sums[currSum-k]);
+        if(sums.find(currSum)==sums.end()) sums[currSum] = i;
+    }
+    return maxLength;
+}
+};
