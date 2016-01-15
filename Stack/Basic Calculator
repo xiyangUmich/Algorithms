@@ -62,3 +62,48 @@ public:
     }
 
 };
+Method II
+class Solution {
+public:
+    int calculate(string s) {
+        if(s.size()==0) return 0;
+        for(int i=0;i<s.size();) 
+          if(s[i]==' ') s.erase(s.begin()+i);
+           else i++;
+        if(s.size()==0) return 0;
+       s="("+s+")";
+       stack<int> nums;
+       stack<char> ops;
+       
+       int i=0;
+       while(i<s.size()){
+           if(s[i]>='0' && s[i]<='9'){
+           int temp=0;
+           while(i<s.size() && s[i]>='0' && s[i]<='9') temp = temp*10 + (s[i++]-'0');
+               nums.push(temp);
+               --i;
+           }
+          else if(s[i]==')') {
+              int temp2=0;
+              while(ops.top()!='('){
+                  if(ops.top()=='+')
+                  temp2+=nums.top();
+                  else 
+                  temp2-=nums.top();
+                  nums.pop();
+                  ops.pop();
+              }
+              temp2+=nums.top();
+              nums.pop();
+              ops.pop();
+              nums.push(temp2);
+          }
+          else ops.push(s[i]);
+           ++i;
+       }
+      return nums.top();
+      
+       
+    }
+
+};
