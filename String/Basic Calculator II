@@ -64,3 +64,43 @@ public:
     return res;
     }
 };
+
+Method II
+class Solution {
+public:
+    int calculate(string s) {
+    for(int i=0;i<s.size();)
+        if(s[i]==' ') s.erase(s.begin()+i);
+        else ++i;
+    vector<int> nums;
+    vector<char> ops;
+    int i=0;
+    while(i<s.size()){
+        if(s[i]>='0' && s[i]<='9'){
+            int temp = 0;
+            while(i<s.size() && s[i]>='0' && s[i]<='9')
+                temp = temp*10+(s[i++]-'0');
+            nums.push_back(temp);
+        }
+        else if(s[i]=='*' || s[i]=='/'){
+            int temp = 0;
+            char op = s[i];
+            ++i;
+            while(i<s.size() && s[i]>='0' && s[i]<='9')
+                temp = temp*10+(s[i++]-'0');
+            int n = nums[nums.size()-1];
+            nums.pop_back();
+            
+            if(op=='*') nums.push_back(n*temp);
+            else nums.push_back(n/temp);
+        }
+        else ops.push_back(s[i++]);
+    }
+    int res = nums[0];
+    i=1;
+    while(i<nums.size())
+     if(ops[i-1]=='+') res+=nums[i++];
+     else res-=nums[i++];
+    return res;
+    }
+};
