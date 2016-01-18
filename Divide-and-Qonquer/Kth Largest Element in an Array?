@@ -1,0 +1,13 @@
+Find the kth largest element in an unsorted array.
+
+Method I
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        sort(nums.begin(),nums.end(),compare);
+        return nums[k-1];
+    }
+    static bool compare(int i, int j) {return (i>j);}   //Compare function should be a static one
+};
+
+Method II
