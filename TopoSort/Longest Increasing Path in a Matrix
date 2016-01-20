@@ -1,0 +1,54 @@
+Given an integer matrix, find the length of the longest increasing path.
+
+From each cell, you can either move to four directions: left, right, up or down. You may NOT move diagonally or move outside of the boundary (i.e. wrap-around is not allowed).
+
+Example 1: 
+nums = [
+  [9,9,4],
+  [6,6,8],
+  [2,1,1]
+]
+
+
+
+Return 4
+
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int R = matrix.size();
+        if(R==0) return 0;
+        int C = matrix[0].size();
+        int r = 0, c = 0;
+        int res = 1;
+        
+        vector<vector<int>> steps(R,vector<int>(C,0));
+        for(int i=0;i<R;++i)
+            for(int j=0;j<C;++j)
+              res = max(res,helper(matrix, steps, i, j, R, C));
+        return res;
+        
+    }
+    int helper(vector<vector<int>>& matrix, vector<vector<int>>& steps, int r, int c, int R, int C){
+        if(steps[r][c]!=0) return steps[r][c];
+        int maxStep = 0;
+        if(r>0 && matrix[r][c]<matrix[r-1][c]) {
+            int b = helper(matrix, steps, r-1, c, R, C); 
+            maxStep = max(maxStep, b);
+        }
+        if(r<R-1 && matrix[r][c]<matrix[r+1][c]){
+            int u = helper(matrix, steps, r+1, c, R, C); 
+            maxStep = max(maxStep, u);
+        }
+        if(c>0 && matrix[r][c]<matrix[r][c-1]) {
+            int l = helper(matrix, steps, r, c-1, R, C); 
+            maxStep = max(maxStep, l);
+        }
+        if(c<C-1 && matrix[r][c]<matrix[r][c+1]) {
+            int ri = helper(matrix, steps, r, c+1, R, C); 
+            maxStep = max(maxStep, ri);
+        }
+        steps[r][c] = maxStep+1;
+        return steps[r][c];
+    }
+};
