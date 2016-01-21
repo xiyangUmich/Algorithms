@@ -18,3 +18,21 @@ public:
        }
     }
 };
+
+Method II Much Faster
+class Solution {
+public:
+    int mySqrt(int x) {
+        long long mid;
+       long long small=0, big=x;
+       while(small<big){
+         long long mid = small + (big-small)/2;
+         if(mid*mid == x) return (int)mid;
+         if(mid*mid > x) big = mid-1; 
+         else small = mid + 1;
+           
+       }
+       return small*small > x? (int)small-1:(int)small;
+       
+    }
+};
