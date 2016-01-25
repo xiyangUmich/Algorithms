@@ -16,3 +16,19 @@ public:
         next_permutation(begin(nums), end(nums));
     }
 };
+
+Method II
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int ind = 0;
+        for(int i = 1; i < nums.size(); ++i)
+            if(nums[i] > nums[i-1]) ind = i;
+        int j = nums.size()-1;
+        if(ind!=0){
+            while(nums[j] <= nums[ind-1]) --j;
+            swap(nums[j], nums[ind-1]);
+        }
+        sort(nums.begin()+ind, nums.end());
+    }
+};
