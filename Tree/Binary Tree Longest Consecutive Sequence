@@ -38,3 +38,32 @@ public:
             maxLength = max(currLength, maxLength);
     }
 };
+
+Method II
+class Solution {
+public:
+    int longestConsecutive(TreeNode* root) {
+        if(root==NULL) return 0;
+        int maxNum = 1;
+        helper(root, maxNum, 1);
+        return maxNum;
+    }
+    void helper(TreeNode* root, int &maxNum, int currNum){
+        if((!root->left || root->left->val-root->val != 1) && 
+           (!root->right || root->right->val-root->val != 1))
+           maxNum = max(maxNum, currNum);
+           
+        if(root->right){
+            if(root->right->val-root->val==1)
+                helper(root->right, maxNum, currNum+1);
+            else
+                 helper(root->right,maxNum, 1);
+        }
+       if(root->left){
+            if(root->left->val-root->val==1)
+                helper(root->left, maxNum, currNum+1);
+            else
+                helper(root->left,maxNum, 1);
+       }
+    }
+};
