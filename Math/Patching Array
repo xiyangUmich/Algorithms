@@ -1,0 +1,31 @@
+Given a sorted positive integer array nums and an integer n, add/patch elements to the array such that any number in range [1, n] inclusive can be formed by the sum of some elements in the array. Return the minimum number of patches required. 
+
+Example 1:
+nums = [1, 3], n = 6
+ Return 1.
+
+Combinations of nums are [1], [3], [1,3], which form possible sums of: 1, 3, 4.
+
+class Solution {
+public:
+    int minPatches(vector<int>& nums, int n) {
+        long long reach = 0;
+        int num = 0;
+        int i = 0;
+        while(i<nums.size()){
+            if(reach>=n) break;
+            while(nums[i]>(reach+1)){
+               reach += reach+1;
+               ++num;
+               if(reach>=n) break;
+            } 
+            reach += nums[i];
+            ++i;
+        }
+        while(reach<n){
+            reach += reach+1;
+            ++num;
+        }
+        return num;
+    }
+};
