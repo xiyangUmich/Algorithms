@@ -26,3 +26,8 @@ public:
     }
   
 };
+Method II
+Change compare as a function (static)
+static bool myComp(string a, string b){
+            return (a+b)>(b+a);
+        }
