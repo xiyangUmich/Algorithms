@@ -32,3 +32,38 @@ public:
         return -1;
     }
 };
+
+Method II
+class Solution {
+public:
+   int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+       int n = gas.size();
+       if(n == 0) return -1;
+       if(n == 1) return gas[0]>=cost[0]?0:-1;
+       
+       int s = 0;
+       int e = 0;
+       int curr = 0;
+       
+       while(1){
+           if(s == e){
+               while(gas[s]<cost[s]){
+               if(s == n-1) return -1;
+               ++s;
+               }
+               e = (s+1)%n;
+              curr = gas[s]-cost[s] + gas[e]-cost[e];
+           }
+           if(curr >= 0){
+               int dis = e>s?(e-s):(e+n-s);
+               if(dis == n-1) return s;
+               e = (e+1)%n;
+               curr += gas[e] - cost[e];
+           }
+           else{
+               if(s == n-1) return -1;
+               curr -= (gas[s]-cost[s]);
+               s++;
+           }
+       }
+    }
