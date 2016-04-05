@@ -31,3 +31,37 @@ public:
     }
     
 };
+
+Method II Backtracking
+class Solution {
+public:
+   
+   bool helper(long long num1,long long num2, int start, string &num){
+        if(start==num.size()) return true;
+        //if(num[start]=='0') return false;
+        long long num3 = 0;
+        int i = start;
+        while(num3<(num1+num2) && i<num.size()){
+            num3 = num3*10 + num[i++]-'0';
+            if((num3 == num1+num2) && helper(num2, num3, i, num)) return true;
+            if(num[start] == '0') break;
+        }
+        return false;
+    }
+    bool isAdditiveNumber(string num) {
+        if(num.size()<3) return false;
+        long long num1 = 0;
+        long long num2 = 0;
+        for(int i=0;i<=num.size()/3;++i){
+            num1 = num1*10 + num[i]-'0';
+            num2 = 0;
+            for(int j = i+1;j-i<=(num.size()-i-1)/2;++j) {
+                num2 = num2*10 + num[j]-'0';
+                if(helper(num1, num2, j+1, num)) return true;
+                if(num[i+1] == '0') break;
+            }
+            if(num[0] == '0') break;
+        }
+        return false;
+    }
+};
