@@ -1,0 +1,19 @@
+EGiven a positive integer num, write a function which returns True if num is a perfect square else False.
+
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+       
+        int low = 1, high = num;
+      while(low<=high){
+          int mid = low + (high-low)/2;
+          int r = num/mid;
+          if(r==mid){
+              return num%r==0;
+          }
+          if(r<mid) high = mid-1;
+          else low = mid+1;
+      }
+       return false;
+    }
+};
