@@ -1,0 +1,65 @@
+Given an Android 3x3 key lock screen and two integers m and n, where 1 ≤ m ≤ n ≤ 9, count the total number of unlock patterns of the Android lock screen, which consist of minimum of m keys and maximum n keys.
+
+Rules for a valid pattern:
+
+1.Each pattern must connect at least m keys and at most n keys.
+2.All the keys must be distinct.
+3.If the line connecting two consecutive keys in the pattern passes through any other keys, the other keys must have previously selected in the pattern. No jumps through non selected key is allowed.
+4.The order of keys used matters.
+
+class Solution {
+private:
+
+vector<int> temp;
+int totalNum;
+
+public:
+    int numberOfPatterns(int m, int n) {
+        vector<bool> visited (10,false);
+        vector<vector<int>> passBy(10, vector<int>(10,-1));
+        totalNum = 0;
+
+        passBy[1][3] = 2;
+        passBy[3][1] = 2;
+        passBy[1][9] = 5;
+        passBy[9][1] = 5;
+        passBy[1][7] = 4;
+        passBy[7][1] = 4;
+        passBy[2][8] = 5;
+        passBy[8][2] = 5;
+        passBy[3][7] = 5;
+        passBy[7][3] = 5;
+        passBy[3][9] = 6;
+        passBy[9][3] = 6;
+        passBy[4][6] = 5;
+        passBy[6][4] = 5;
+        passBy[7][9] = 8;
+        passBy[9][7] = 8;
+        helper(m,n, visited, passBy);
+        return totalNum;
+        
+    }
+    void helper(int m, int n, vector<bool> &visited, vector<vector<int>> &passBy){
+        if(temp.size()>=m){
+            if(temp.size()==n){
+                ++totalNum;
+                return;
+            }
+            ++totalNum;
+        }
+        int last = 0;
+        if(temp.size()>0) last = temp.back();
+        
+        for(int k = 1;k<=9;++k){
+           if(visited[k]==false) {
+               if(passBy[last][k]==-1 || visited[passBy[last][k]]){
+                   temp.push_back(k);
+                   visited[k] = true;
+                   helper(m,n, visited, passBy);
+                   temp.pop_back();
+                   visited[k] = false;
+               }
+           }
+        }
+    }
+};
