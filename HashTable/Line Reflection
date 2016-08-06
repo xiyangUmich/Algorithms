@@ -1,0 +1,42 @@
+Given n points on a 2D plane, find if there is such a line parallel to y-axis that reflect the given points.
+
+class Solution {
+private:
+unordered_map<int, vector<int>> map;
+//unordered_map<int, bool> hasVisited;
+
+static bool mySort(pair<int,int> p1, pair<int,int> p2){
+    return (p1.first<p2.first ||(p1.first==p2.first && p1.second<=p2.second));
+}
+
+bool isMutualContain(vector<int> v1, vector<int> v2){
+    int i = 0, j = 0;
+    while(i<v1.size() || j<v2.size()){
+        if(i>=v1.size() || j>=v2.size() || v1[i]!=v2[j]) return false;
+        int temp = v1[i];
+        while(i<v1.size() && v1[i] == temp) ++i;
+        while(j<v2.size() && v2[j] == temp) ++j;
+    }
+    return true;
+}
+
+public:
+    bool isReflected(vector<pair<int, int>>& points) {
+        int maxN = INT_MIN;
+        int minN = INT_MAX;
+        for(auto p:points){
+           map[p.first].push_back(p.second);
+           maxN = max(maxN,p.first);
+           minN = min(minN,p.first);
+        } 
+        int sum = maxN + minN;
+        //for(auto m:map) hasVisited[m.first] = false;
+        for(auto m:map){
+           int x1 = m.first;
+           int x2 = sum-m.first;
+           if(map.find(x2)==map.end() ||(x2>x1 && !isMutualContain(map[x1],map[x2]))) return false; 
+            
+        }
+        return true;
+    }
+};
