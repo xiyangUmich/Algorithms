@@ -1,0 +1,56 @@
+Design a data structure that supports all following operations in average O(1) time.
+Note: Duplicate elements are allowed. 
+
+1.insert(val): Inserts an item val to the collection.
+2.remove(val): Removes an item val from the collection if present.
+3.getRandom: Returns a random element from current collection of elements. The probability of each element being returned is linearly related to the number of same value the collection contains.
+
+class RandomizedCollection {
+private:
+vector<int> nums;
+unordered_map<int,vector<int>> map;
+
+public:
+    /** Initialize your data structure here. */
+    RandomizedCollection() {
+        
+    }
+    
+    /** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
+    bool insert(int val) {
+        map[val].push_back(nums.size());
+        nums.push_back(val);
+        return map[val].size()==1;
+    }
+    
+    /** Removes a value from the collection. Returns true if the collection contained the specified element. */
+    bool remove(int val) {
+        if(map.find(val)==map.end() || map[val].size()==0) return false;
+        int pos = map[val].back();
+        map[val].pop_back();
+        int last = nums.back();
+        nums.pop_back();
+        nums[pos] = last;
+        for(int i = map[last].size()-1;i>=0;--i){
+            if(map[last][i]==nums.size()){
+                map[last][i] = pos;
+                break;
+            }
+        }
+       return true;
+    }
+    
+    /** Get a random element from the collection. */
+    int getRandom() {
+        int index = rand()%nums.size();
+        return nums[index];
+    }
+};
+
+/**
+ * Your RandomizedCollection object will be instantiated and called as such:
+ * RandomizedCollection obj = new RandomizedCollection();
+ * bool param_1 = obj.insert(val);
+ * bool param_2 = obj.remove(val);
+ * int param_3 = obj.getRandom();
+ */
