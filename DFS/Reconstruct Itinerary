@@ -1,0 +1,43 @@
+Given a list of airline tickets represented by pairs of departure and arrival airports [from, to], reconstruct the itinerary in order. All of the tickets belong to a man who departs from JFK. Thus, the itinerary must begin with JFK.
+
+class Solution {
+private:
+bool static myComp(pair<string, string> p1, pair<string, string> p2){
+    return (p1.second<=p2.second);
+}
+vector<string> res;
+unordered_map<string, vector<string>> map;
+int totalNum;
+
+public:
+    vector<string> findItinerary(vector<pair<string, string>> tickets) {
+        if(tickets.size()==0) return res;
+        totalNum = 0;
+        sort(tickets.begin(),tickets.end());
+        for(auto t:tickets){
+          map[t.first].push_back(t.second);
+          totalNum++;
+        } 
+       
+        string begin = "JFK";
+        res.push_back(begin);
+        int visited = 0;
+        helper(begin, visited);
+        return res;
+        }
+        
+   void helper(string s, int &visited){
+      if(visited==totalNum) return;
+      for(int i = 0;i<map[s].size();++i){
+          string s2 = map[s][i];
+          map[s].erase(map[s].begin()+i);
+          res.push_back(s2);
+          visited++;
+          helper(s2,visited);
+          if(visited==totalNum) return;
+          res.pop_back();
+          visited--;
+           map[s].insert(map[s].begin()+i, s2);
+       }
+   }     
+};
