@@ -1,0 +1,29 @@
+You are given two jugs with capacities x and y litres. There is an infinite amount of water supply available. You need to determine whether it is possible to measure exactly z litres using these two jugs.
+
+If z liters of water is measurable, you must have z liters of water contained within one or both buckets by the end.
+
+Operations allowed: 
+•Fill any of the jugs completely with water.
+•Empty any of the jugs.
+•Pour water from one jug into another till the other jug is completely full or the first jug itself is empty.
+
+class Solution {
+public:
+    bool canMeasureWater(int x, int y, int z) {
+     if(x==z || y==z ||(x+y)==z) return true;
+     if(x+y<z ||x==0 || y==0) return false;
+     if(x>y){
+         int temp = x;
+         x = y;
+         y = temp;
+     }
+     if(z>x && z%x==0) return true;
+     int vol = 0;
+     while(1){
+         if(vol<x) vol+=y;
+         else vol-=x;
+         if(vol==z) return true;
+         if(vol==0) return false;
+     }
+    }
+};
