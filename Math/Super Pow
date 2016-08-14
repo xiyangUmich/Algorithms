@@ -17,3 +17,6 @@ public:
         return res;
     }
 };
+
+
+//pow(a,2)%c = (a*a)%c = a*(a%c)%c = (a%c)*(a%c)%c;
