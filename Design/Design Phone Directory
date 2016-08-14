@@ -1,0 +1,66 @@
+Design a Phone Directory which supports the following operations:
+
+get: Provide a number which is not assigned to anyone.
+check: Check if a number is available or not.
+release: Recycle or release a number.
+
+class PhoneDirectory {
+private:
+struct ListNode{
+    int val;
+    ListNode* next;
+    ListNode(int x):val(x),next(NULL){}
+};
+ListNode* head = new ListNode(0);
+unordered_map<int,bool> used;
+int size;
+int currMax = -1;
+public:
+    /** Initialize your data structure here
+        @param maxNumbers - The maximum numbers that can be stored in the phone directory. */
+    PhoneDirectory(int maxNumbers):size(maxNumbers){
+        if(maxNumbers==0) head = NULL;
+    }
+    
+    /** Provide a number which is not assigned to anyone.
+        @return - Return an available number. Return -1 if none is available. */
+    int get() {
+        if(head==NULL) return -1;
+        int temp = head->val;
+        currMax = max(currMax, temp);
+        if(head->next)
+          head = head->next;
+        else{
+        if(currMax == size-1) head = NULL;
+        else head->val = currMax+1;
+        }
+         used[temp] = true;
+        return temp;
+    }
+    
+    /** Check if a number is available or not. */
+    bool check(int number) {
+       return (currMax<number || !used[number]);
+    }
+    
+    /** Recycle or release a number. */
+    void release(int number) {
+      if(currMax <number || !used[number]) return;
+      ListNode* temp = new ListNode(number);
+      if(head == NULL) head = temp;
+      else{
+      temp->next = head->next;
+      head->next = temp;
+     
+      }
+       used[number] = false;
+    }
+};
+
+/**
+ * Your PhoneDirectory object will be instantiated and called as such:
+ * PhoneDirectory obj = new PhoneDirectory(maxNumbers);
+ * int param_1 = obj.get();
+ * bool param_2 = obj.check(number);
+ * obj.release(number);
+ */
