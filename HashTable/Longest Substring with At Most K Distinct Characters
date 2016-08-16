@@ -1,0 +1,35 @@
+Given a string, find the length of the longest substring T that contains at most k distinct characters. 
+
+For example, Given s = “eceba” and k = 2, 
+
+T is "ece" which its length is 3. 
+
+class Solution {
+public:
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        unordered_map<char,int> map;
+        int begin = 0, end = 0;
+        int res = 0;
+        int currTotal = 0;
+        while(end<s.size()){
+            while(end<s.size()){
+                map[s[end]]++;
+                if(map[s[end]]==1) currTotal++;
+                if(currTotal>k) break;
+                ++end;
+            }
+            res = max(res,end-begin);
+            while(begin<=end){
+                map[s[begin]]--;
+                if(map[s[begin]]==0){
+                  currTotal--;
+                  ++begin;
+                  ++end;
+                  break;
+                }
+                ++begin;
+            }
+        }
+        return res;
+    }
+};
