@@ -56,3 +56,28 @@ public:
     }
     
 };
+
+Method II  //In place
+class Solution {
+
+public:
+    void flatten(TreeNode* root) {
+      preorder(root);
+    }
+    TreeNode* preorder(TreeNode* root){
+      if(!root) return NULL;
+      if(!root->left && !root->right) return root;
+      TreeNode* l1;
+      TreeNode* l2;
+      l1 = preorder(root->left);
+      l2 = preorder(root->right);
+      if(root->left){
+          TreeNode* temp = root->right;
+          root->right = root->left;
+          if(l1!=NULL) l1->right = temp;
+          root->left = NULL;
+      }
+      return l2!=NULL?l2:l1;
+    }
+    
+};
