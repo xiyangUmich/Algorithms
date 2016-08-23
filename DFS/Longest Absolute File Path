@@ -1,0 +1,39 @@
+class Solution {
+private:
+    stack<int> l;
+    stack<int> t;
+public:
+    int lengthLongestPath(string input) {
+       int maxL = 0;
+       helper(0,maxL,input);
+       return maxL;
+       
+    }
+    void helper(int begin, int& maxL, string &input){
+        if(begin>=input.size()) return;
+        int i = begin;
+        int currT = 0;
+        bool isFile = false;
+        while(input[i]=='\n' || input[i]=='\t'){
+            if(input[i]=='\t') currT++;
+            i++;
+        }
+        int b = i;
+        
+        while(!t.empty() && currT<=t.top()){
+            t.pop();
+            l.pop();
+        }
+        t.push(currT);
+        
+        while(i<input.size() && input[i]!='\n'){
+         if(input[i]=='.')  isFile = true;
+         ++i;
+        }
+        int length = isFile?i-b:i-b+1;
+      
+        l.push(l.empty()?length:l.top()+length);
+        if(isFile) maxL = max(l.top(),maxL);
+       helper(i,maxL,input);
+    }
+};
