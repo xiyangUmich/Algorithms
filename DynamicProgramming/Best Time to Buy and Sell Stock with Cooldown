@@ -37,3 +37,21 @@ public:
     }
    
 };
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+       if(prices.size()==0) return 0;
+       int maxProfit = 0;
+       vector<int> profits(prices.size(), 0);
+       for(int i = 1;i<prices.size();++i){
+           profits[i] = profits[i-1];
+           for(int j = i-1;j>=0;--j){
+               if(prices[j]<prices[i]) profits[i] = max(profits[i], j>1?prices[i]-prices[j]+profits[j-2]:prices[i]-prices[j]);
+           }
+           //maxProfit = max(maxProfit, profits[i]);
+       }
+       return profits[prices.size()-1];
+    }
+   
+};
