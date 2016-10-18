@@ -1,0 +1,18 @@
+Given a non-empty array containing only positive integers, find if the array can be partitioned into two subsets such that the sum of elements in both subsets is equal
+
+class Solution {
+  public:    
+    bool canPartition(vector<int>& nums) {       
+      int sum = accumulate(nums.begin(), nums.end(),0);       //calculate sum of a vector (third par: initial)
+      if(sum&1) return false;              
+      int half = sum>>1;       
+      vector<bool> visited(half+1,false);       
+      visited[0] = true;              
+      for(auto n:nums){           
+        for(int i = half;i>=n;--i){               
+          if(visited[i-n]) visited[i] = true;           
+        }       
+      }      
+      return visited[half];         
+    }
+ };
