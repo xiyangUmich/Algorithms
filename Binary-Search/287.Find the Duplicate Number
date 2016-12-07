@@ -6,12 +6,13 @@ class Solution
 public:    
   int findDuplicate(vector<int>& nums) {     
       int n = nums.size()-1;     
-      int high = n;     int low = 1;          
+      int high = n;     
+      int low = 1;          
       while(low<high){         
         int mid = (low+high)/2;         
         int c = 0;         
         for(int n:nums)            
-          if(n<=mid) c++;                 
+          if(n<=mid) c++;       // If there's no duplicate number from 1 to mid (inclusively), c<=mid          
         if(c<=mid) low = mid+1;        
         else high = mid;     
        }     
