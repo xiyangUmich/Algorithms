@@ -1,0 +1,28 @@
+class Solution {
+public:    /**     * @param nums: A list of integers.     * @return: The median of numbers     */    vector<int> medianII(vector<int> &nums) {        
+  // write your code here        
+  vector<int> res;        
+  if(nums.size()==0) return res;                
+  priority_queue<int,vector<int>,less<int> > p1;        
+  priority_queue<int,vector<int>,greater<int> > p2;               
+  p1.push(nums[0]);        
+  res.push_back(nums[0]);        
+  int temp = 0;        
+  for(int i = 1;i<nums.size();++i){            
+    if(nums[i]<p1.top()) p1.push(nums[i]);            
+    else p2.push(nums[i]);            
+    if(p1.size()<p2.size()){                
+      temp = p2.top();                
+      p2.pop();                
+      p1.push(temp);            
+    }            
+    else if(p1.size()-p2.size()>1){                
+      temp = p1.top();                
+      p1.pop();                
+      p2.push(temp);            
+    }            
+    res.push_back(p1.top());        
+   }        
+  return res;    
+ }
+};
