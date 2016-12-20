@@ -1,0 +1,43 @@
+There is an integer matrix which has the following features:The numbers in adjacent positions are different.The matrix has n rows and m columns.For all i < m, A[0][i] < A[1][i] && A[n - 2][i] > A[n - 1][i].For all j < n, A[j][0] < A[j][1] && A[j][m - 2] > A[j][m - 1].
+
+class Solution {    
+  private: vector<int> res;public:    /**     * @param A: An integer matrix     * @return: The index of the peak     */    
+  vector<int> findPeakII(vector<vector<int> > A) {        
+    // write your code here        
+    int m = A.size();        
+    if(m==0) return res;        
+    int n = A[0].size();        
+    if(n==0) return res;        
+    help(0,n-1,0,m-1,true,A);        
+    return res;            
+   }    
+   void help(int l ,int r, int u, int d, bool flag, vector<vector<int>> A){        
+    if(flag){            
+      int mid = u + (d-u)/2;            
+      int index = l;            
+      for(int i = l+1;i<=r;++i)                
+        if(A[mid][i]>A[mid][index]) index = i;            
+        if(A[mid][index]>A[mid-1][index] && A[mid][index]>A[mid+1][index]){                
+          res.push_back(mid);                
+          res.push_back(index);                
+          return;           
+         }            
+         else if(A[mid][index]<A[mid+1][index])                
+          help(l,r,mid+1,d,!flag,A);            
+         else if(A[mid][index]<A[mid-1][index])                
+          help(l,r,u,mid-1,!flag,A);        
+         }        
+      else{            
+        int mid = l + (r-l)/2;            
+        int index = u;            
+        for(int i = u+1;i<=d;++i)                
+          if(A[i][mid]>A[index][mid]) index = i;            
+          if(A[index][mid]>A[index][mid+1] && A[index][mid]>A[index][mid-1]){                
+            res.push_back(index);                
+            res.push_back(mid);                
+            return;            
+          }            
+       else if(A[index][mid]<A[index][mid+1])                
+        help(mid+1,r,u,d,!flag,A);            
+       else if(A[index][mid]<A[index][mid-1])                
+        help(l,mid-1,u,d,!flag,A);            }            }};
