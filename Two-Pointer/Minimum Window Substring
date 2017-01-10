@@ -1,0 +1,64 @@
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+For example,
+S = "ADOBECODEBANC"
+T = "ABC"
+Minimum window is "BANC".
+
+class Solution {
+private:
+unordered_map<char,int> map;
+int total=0;
+public:
+    string minWindow(string s, string t) {
+        if(t.size()==0) return t;
+        string res;
+        if(s.size()==0 || s.size()<t.size()) return res;
+        
+        for(char c:t){
+           map[c]++;
+           total++;
+        } 
+        
+        int begin = 0, end = 0;
+        while(end<s.size()){
+            if(map.find(s[end])!=map.end()){
+                map[s[end]]--;
+                if(map[s[end]]>=0) total--;
+                if(total==0){
+                    res = string(s,0,end-begin+1);
+                    break;
+                }
+            }
+            ++end;
+        }
+        if(end==s.size()) return res;
+        while(end<s.size() && begin<=end){
+            if(map.find(s[begin])!=map.end()){
+                map[s[begin]]++;
+                if(map[s[begin]]>0) total++;
+            }
+            begin++;
+            if(total==0){
+              if(end-begin+1<res.size())
+                res = string(s,begin,end-begin+1);
+            }
+            else{
+                ++end;
+                while(end<s.size()){
+                    if(map.find(s[end])!=map.end()){
+                        map[s[end]]--;
+                        if(map[s[end]]>=0) total--;
+                        if(total==0){
+                            if(end-begin+1<res.size())
+                                res = string(s,begin,end-begin+1);
+                            break;
+                        }
+                    }
+                    ++end;
+                }
+          }
+        }
+        return res;
+    }
+};
