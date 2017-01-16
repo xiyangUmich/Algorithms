@@ -1,0 +1,69 @@
+There are a row of n houses, each house can be painted with one of the k colors. The cost of painting each house with a certain color is different. You have to paint all the houses such that no two adjacent houses have the same color.
+
+The cost of painting each house with a certain color is represented by a n x k cost matrix. For example, costs[0][0] is the cost of painting house 0 with color 0; costs[1][2] is the cost of painting house 1 with color 2, and so on... Find the minimum cost to paint all houses.
+
+class Solution {
+public:
+    int minCostII(vector<vector<int>>& costs) {
+        int m = costs.size();
+        if(m==0) return 0;
+        int n = costs[0].size();
+        if(n==0) return 0;
+        if(n==1){
+            int sum = 0;
+            for(int i = 0;i<m;++i){
+                sum+=costs[i][0];
+            }
+            return sum;
+        }
+        
+        pair<int,int> min1 = make_pair(costs[0][0],0);
+        pair<int,int> min2 = make_pair(INT_MAX,-1);;
+        
+        for(int j = 1;j<n;++j){
+            if(costs[0][j]<min1.first){
+                min2 = min1;
+                min1.first = costs[0][j];
+                min1.second = j;
+            }
+            else if(costs[0][j]<min2.first){
+                min2.first = costs[0][j];
+                min2.second = j;
+            }
+        }
+        
+        for(int i = 1;i<m;++i){
+            int j1 = min1.second;
+            int j2 = min2.second;
+            int c1 = min1.first;
+            int c2 = min2.first;
+            int m1 = costs[i][j2]+c1;
+            int m2 = costs[i][j1] + c2;
+            if(m1<m2){
+                min1.first = m1;
+                min1.second = j2;
+                min2.first = m2;
+                min2.second = j1;
+            }
+            else{
+                min1.first = m2;
+                min2.first = m1;
+            }
+            for(int j = 0;j<n;++j){
+                if(j==j1 || j==j2) continue;
+                int temp = c1+costs[i][j];
+                if(temp<min1.first){
+                    min2 = min1;
+                    min1.first = temp;
+                    min1.second = j;
+                }
+                else if(temp<min2.first){
+                    min2.first = temp;
+                    min2.second = j;
+                }
+            }
+        }
+        
+        return min1.first;
+    }
+};
