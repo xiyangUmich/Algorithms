@@ -1,0 +1,25 @@
+Given an array which consists of non-negative integers and an integer m, you can split the array into m non-empty continuous subarrays. Write an algorithm to minimize the largest sum among these m subarrays. Note: If n is the length of array, assume the following constraints are satisfied: 1 ≤ n ≤ 10001 ≤ m ≤ min(50, n)
+class Solution {
+  public:    
+    int splitArray(vector<int>& nums, int m) {        
+      int n = nums.size();        
+      if(n==0) return 0;        
+      vector<int> sums(n,nums[0]);        
+      for(int i = 1;i<n;++i) sums[i] = nums[i]+sums[i-1];                
+      vector<vector<vector<int>>> maxSums(n,vector<vector<int>>(n,vector<int>(m+1,INT_MAX)));                
+      for(int i = 0;i<n;++i)            
+        for(int j = i;j<n;++j)                
+          maxSums[i][j][1] = i==0?sums[j]:sums[j]-sums[i-1];                
+          for(int d = 1;d<n;++d){            
+            for(int i = 0;i+d<n;++i){                
+              for(int p = 2; p<=min(d+1,m);++p){                    
+                for(int k = i;k<i+d;++k){                        
+                  maxSums[i][i+d][p] = min(maxSums[i][i+d][p], 
+                   max(maxSums[i][k][p-1],sums[i+d]-sums [k]));                    
+                }                
+             }            
+            }        
+          }        
+        return maxSums[0][n-1][m];          
+      }   
+   };
