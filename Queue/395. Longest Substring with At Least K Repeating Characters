@@ -1,0 +1,31 @@
+Find the length of the longest substring T of a given string (consists of lowercase letters only) such that every character in T appears no less than k times.
+
+class Solution {
+public:
+    int longestSubstring(string s, int k) {
+        if(s.size()==0) return 0;
+        unordered_map<char, int> map;
+        int diffTotal = 0;
+        for(auto c:s){
+            if(map.find(c)==map.end()) diffTotal++;
+            map[c]++;
+            if(map[c] == k) diffTotal--;
+        }
+        int begin = 0, end = s.size()-1;
+        while(diffTotal > 0 && end>=0){
+            map[s[end]]--;
+            if(map[s[end]] == k-1) diffTotal++;
+            else if(map[s[end]] == 0) diffTotal--;
+        }
+
+        int res = end-begin+1;
+        
+        
+        while(begin<end){
+             ++begin;
+             map[s[begin]]--;
+            if(map[s[end]] == k-1) diffTotal++;
+            else if(map[s[end]] == 0) diffTotal--;
+        }
+    }
+};
