@@ -1,0 +1,27 @@
+Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+
+private:
+    deque<int> dq;
+    void inQueue(int i){
+        while(!dq.empty() && dq.back()<i) dq.pop_back();
+        dq.push_back(i);
+    }
+    void outQueue(int i){
+        if(dq.front()==i) dq.pop_front();
+    }
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+       vector<int> res;
+       if(nums.size()==0 || nums.size()<k) return res;
+        for(int i = 0;i<k;++i) inQueue(nums[i]);
+        res.push_back(dq.front());
+        
+        for(int i = 0;i+k<nums.size();++i){
+            outQueue(nums[i]);
+            inQueue(nums[i+k]);
+            res.push_back(dq.front());
+        }
+        
+        return res;
+    
+    }
