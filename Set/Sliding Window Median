@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        // write your code here
+         vector<double> res;
+         multiset<double> set;
+        if(nums.size()==0 || nums.size()<k)
+        return res;
+       
+        
+        for(int i = 0;i<k-1;++i){
+           set.insert(nums[i]);
+        }
+        
+        for(int i = 0;i+k-1<nums.size();++i){
+            set.insert(nums[i+k-1]);
+            auto itb = set.begin();
+            advance(itb, (k-1)/2);
+            auto ite = set.end();
+            advance(ite, -(k+1)/2);
+            
+            res.push_back(*itb + (*ite-*itb)/2.0);
+            
+            auto it = set.find(nums[i]);
+            set.erase(it);
+        }
+        
+        return res;
+    }
+};
