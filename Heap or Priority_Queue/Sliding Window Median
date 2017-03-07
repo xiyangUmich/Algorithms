@@ -1,0 +1,172 @@
+class HashHeap{
+private:
+    vector<pair<int,int>> heap;
+    unordered_map<int,int> map;
+    string type;
+    int size = 0;
+   static bool min(int x, int y){
+            return x<y;
+        }
+    
+    static bool max(int x, int y){
+            return x>y;
+        }
+    
+   
+    bool (*comp)(int,int);
+    
+   void shiftUp(){
+        int index = size-1;
+        while(index>0 && !comp(heap[(index-1)/2].first, heap[index].first)){
+            swap((index-1)/2, index);
+            index = (index-1)/2;
+        }
+    }
+    
+    void shiftDown(int index){
+         
+        while(index*2+1<size){
+            int index2, value2;
+            if(index*2+2>=size  || comp(heap[index*2+1].first, heap[index*2+2].first)){
+                index2 = index*2+1;
+                value2 = heap[index2].first;
+            }
+            else{
+                index2 = index*2+2;
+                value2 = heap[index2].first;
+            }
+            if(comp(heap[index].first, heap[index2].first)) break;
+            else{
+               swap(index, index2);
+               index = index2;
+            } 
+        }
+    }
+    
+    void swap(int i1, int i2){
+        int n1 = heap[i1].first;
+        int n2 = heap[i2].first;
+        
+        auto temp = heap[i1];
+        heap[i1].first = heap[i2].first;
+        heap[i1].second = heap[i2].second;
+        heap[i2] = temp;
+        
+        map[n1] = i2;
+        map[n2] = i1;
+    }
+
+public:
+ HashHeap(string type){
+     if(type == "min") comp = min;
+     else comp = max;
+ }
+    
+    void push(int n){
+        if(map.find(n)!=map.end()){
+            heap[map[n]].second++;
+            ++size;
+        }
+        else{
+            heap.push_back(make_pair(n,1));
+            map[n] = size;
+             ++size;
+            shiftUp();
+        }
+       
+    }
+    
+    void pop(int n){
+        if(heap[map[n]].second>1){
+            heap[map[n]].second--;
+            --size;
+        }
+        else{
+            int index = map[n];
+            int last = heap[size-1].first;
+            heap[index].first = heap[size-1].first;
+            heap[index].second = heap[size-1].second;
+            map[last] = index;
+            heap.pop_back();
+            map.erase(n);
+            --size;
+            shiftDown(index);
+        }
+    }
+    
+    int front(){
+        return heap[0].first;
+    }
+    
+    int back(){
+        return heap[size-1].first;
+    }
+    
+    int getSize(){
+        return size;
+    }
+    bool Contains(int n){
+        return map.find(n) != map.end();
+    }
+    bool empty(){
+        return size == 0;
+    }
+};
+
+class Solution {
+private:
+        HashHeap max;
+        HashHeap min;
+       
+        void add(int n){
+            if(max.empty() || n>max.front()) min.push(n);
+            else max.push(n);
+            
+            while(min.getSize()>max.getSize()){
+                max.push(min.front());
+                min.pop(min.front());
+            }
+            
+            while(max.getSize()-min.getSize()>1){
+                min.push(max.front());
+                max.pop(max.front());
+            }
+        }
+        void remove(int n){
+            if(max.Contains(n)) max.pop(n);
+            else min.pop(n);
+        }
+      
+public:
+    /**
+     * @param nums: A list of integers.
+     * @return: The median of the element inside the window at each moving
+     */
+      Solution():max("max"), min("min"){}
+     
+    vector<int> medianSlidingWindow(vector<int> &nums, int k) {
+        // write your code here
+         vector<int> res;
+        if(nums.size()==0 || nums.size()<k)
+        return res;
+       
+        
+        for(int i = 0;i<k;++i){
+           add(nums[i]);
+        }
+        res.push_back(max.front());
+        //cout<<res[res.size()-1]<<endl;
+        
+        for(int i = 0;i+k<nums.size();++i){
+           remove(nums[i]);
+           add(nums[i+k]);
+           res.push_back(max.front());
+        // cout<<res[res.size()-1]<<endl;
+        }
+        
+        
+        return res;
+    }
+};
+
+//Cannot pass all cases -> haven't found reason
