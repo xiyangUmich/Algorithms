@@ -33,3 +33,38 @@ public:
         return root;
     }
 };
+
+Method II:
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    vector<TreeNode*> nodes;
+    TreeNode* res = NULL;
+public:
+    TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
+       inorderTra(root, p);
+       
+      return res;
+    }
+    void inorderTra(TreeNode* root, TreeNode* p) {
+        if(!root || res) return;
+        inorderTra(root->left, p);
+        if(!res) {
+            if(nodes.size() > 0 && nodes[nodes.size()-1]->val == p->val) {
+                res = root;
+                return;
+            }
+            nodes.push_back(root);
+        }
+        inorderTra(root->right, p);
+    }
+    
+};
