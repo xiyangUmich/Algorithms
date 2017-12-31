@@ -1,0 +1,25 @@
+Given an integer array, you need to find one continuous subarray that if you only sort this subarray in ascending order, then the whole array will be sorted in ascending order, too.
+
+You need to find the shortest such subarray and output its length.
+
+class Solution {
+public:
+    int findUnsortedSubarray(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int n = nums.size();
+        int left = n- 1, right = 0;
+        int small = nums[n-1],  big = nums[0];
+        
+        for(int i = 1; i < nums.size(); ++i) {
+            if(nums[i] < nums[i-1] || nums[i] < big) right = i;
+            else big = nums[i];
+        }
+        
+        for(int i = n-2; i >=0; --i) {
+            if(nums[i] > nums[i+1] || nums[i] > small) left = i;
+            else small = nums[i];
+        }
+        
+        return right == 0? 0: right - left + 1;
+    }
+};
