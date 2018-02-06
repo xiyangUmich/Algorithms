@@ -9,7 +9,7 @@ You may assume no duplicate exists in the array.
 class Solution {
 public:
     int findMin(vector<int>& nums) {
-        if(nums[0]<=nums[nums.size()-1]) return nums[0];
+        if(nums.size() == 0) return -1;
         int begin=0, end = nums.size()-1;
         while(begin<=end){
         if(begin==end) return nums[begin];
