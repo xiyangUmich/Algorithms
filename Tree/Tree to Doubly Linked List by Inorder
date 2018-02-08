@@ -1,0 +1,54 @@
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ * Definition of Doubly-ListNode
+ * class DoublyListNode {
+ * public:
+ *     int val;
+ *     DoublyListNode *next, *prev;
+ *     DoublyListNode(int val) {
+ *         this->val = val;
+           this->prev = this->next = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param root: The root of tree
+     * @return: the head of doubly list node
+     */
+    DoublyListNode * bstToDoublyList(TreeNode * root) {
+        // write your code here
+        DoublyListNode* preHead = new DoublyListNode(-1);
+        DoublyListNode* curr = preHead;
+        if(root)
+        helper(root, preHead);
+        return preHead->next;
+    }
+    DoublyListNode* helper(TreeNode* root, DoublyListNode* curr) {
+        DoublyListNode* temp = new DoublyListNode(root->val);
+        if(!root->left) {
+            curr->next = temp;
+            temp->prev = curr;
+        }
+        else {
+            DoublyListNode* temp2 = helper(root->left, curr);
+            temp2->next = temp;
+            temp->prev = temp2;
+        }
+        if(!root->right) return temp;
+        DoublyListNode* temp3 = helper(root->right, temp);
+        return temp3;
+    }
+};
