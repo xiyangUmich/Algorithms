@@ -1,0 +1,34 @@
+//Implement a MyCalendar class to store your events. A new event can be added if adding the event will not cause a double booking.
+
+Your class will have the method, book(int start, int end). Formally, this represents a booking on the half open interval [start, end), the range of real numbers x such that start <= x < end.
+
+A double booking happens when two events have some non-empty intersection (ie., there is some time that is common to both events.)
+
+For each call to the method MyCalendar.book, return true if the event can be added to the calendar successfully without causing a double booking. Otherwise, return false and do not add the event to the calendar.
+
+Your class will be called like this: MyCalendar cal = new MyCalendar(); MyCalendar.book(start, end)
+
+struct ListNodeTwo {
+    int start;
+    int end;
+    ListNodeTwo* next;
+    ListNodeTwo(int s, int e):start(s),end(e),next(NULL){}
+};
+class MyCalendar {
+private:
+    ListNodeTwo* preHead = new ListNodeTwo(-1, -1);
+public:
+    MyCalendar() { 
+    }
+    
+    bool book(int start, int end) {
+       ListNodeTwo* curr = preHead;
+       while(curr->next != NULL && curr->next->start < end) curr = curr->next;
+       if(curr->end > start) return false;
+       ListNodeTwo* temp = new ListNodeTwo(start, end);
+        ListNodeTwo* next = curr->next;
+        curr->next = temp;
+        temp ->next = next;
+        return true;
+    }
+};
