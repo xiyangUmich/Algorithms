@@ -1,0 +1,35 @@
+
+S and T are strings composed of lowercase letters. In S, no letter occurs more than once.
+
+S was sorted in some custom order previously. We want to permute the characters of T so that they match the order that S was sorted. More specifically, if x occurs before y in S, then x should occur before y in the returned string.
+
+Return any permutation of T (as a string) that satisfies this property.
+
+class Solution {
+public:
+    string customSortString(string S, string T) {
+        vector<char> s;
+        vector<int> t (26, 0);
+        string res;
+        
+        for(auto c:S) {
+            s.push_back(c);
+        }
+        for(auto c:T) {
+            t[c-'a'] ++;
+        }
+        for(auto c: s) {
+            while(t[c-'a'] > 0) {
+                res.push_back(c);
+                t[c-'a']--;
+            }
+        }
+        for(int i = 0; i < 26; ++i) {
+            while(t[i] > 0) {
+                res.push_back('a'+i);
+                t[i]--;
+            }
+        }
+        return res;
+    }
+};
