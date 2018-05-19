@@ -1,0 +1,49 @@
+Given a non-negative integer N, find the largest number that is less than or equal to N with monotone increasing digits.
+
+(Recall that an integer has monotone increasing digits if and only if each pair of adjacent digits x and y satisfy x <= y.)
+
+class Solution {
+public:
+    int monotoneIncreasingDigits(int N) {
+        if(N==0) return N;
+        int M = N;
+        int total = 0;
+        int lastInd = 0;
+        //int lastNum = M%10;
+        //int lastIndNum = 1;
+        int last = 0;
+        while(M > 0) {
+            total++;
+            int curr = M%10; 
+            M /= 10;
+            if(curr > last) {
+               lastInd = total;  
+               //lastIndNum = total;
+            }
+            else if(curr == last) {
+                if(lastInd == total-1)
+                    lastInd = total;
+            }
+            last = curr;
+        }
+        if(lastInd == 1) return N;
+        int res = 0;
+        lastInd = total - lastInd + 1;
+        //lastIndNum = total - lastIndNum + 1;
+        M = N;
+        for(int i = 1; i <= total; ++i) {
+            if(i < lastInd) {
+                res = res*10 + M/(int)(pow(10, total-i));
+            }
+            else if(i == lastInd) {
+                res = res*10 + M/(int)(pow(10, total-i))-1;
+            }
+            else {
+                res = res*10 + 9;
+            }
+            M = M%(int)(pow(10, total-i));
+        }
+        
+        return res;
+    }
+};
