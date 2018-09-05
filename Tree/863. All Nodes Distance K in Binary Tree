@@ -1,0 +1,48 @@
+class Solution {
+private:
+    vector<int> res;
+    unordered_set<TreeNode*> visited;
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+        unordered_map<TreeNode*, TreeNode*> nodeMap;
+        queue<TreeNode*> nodeQ;
+        
+        
+        nodeQ.push(root);
+        while(!nodeQ.empty()) {
+            TreeNode* curr = nodeQ.front();
+            nodeQ.pop();
+            if(curr->val == target->val) break;
+            if(curr->left){
+                nodeQ.push(curr->left);
+                nodeMap[curr->left] = curr;
+            }
+            if(curr->right) {
+                nodeQ.push(curr->right);
+                nodeMap[curr->right] = curr;
+            }           
+        }
+        
+        TreeNode* temp = target;
+        while(temp && K >= 0) {
+            findHelper(temp, K);
+            if(nodeMap.find(temp) == nodeMap.end()) break;
+            temp = nodeMap[temp];
+            K--;
+        }
+        
+        return res;
+    }
+    void findHelper(TreeNode* root, int K) {
+        visited.insert(root);
+        if(K == 0) {
+            res.push_back(root->val);
+            return;
+        }
+        
+        if(root->left && visited.find(root->left) == visited.end()) findHelper(root->left, K-1);
+        if(root->right && visited.find(root->right) == visited.end()) findHelper(root->right, K-1);
+    }
+};
+
+//beat 69.7%; O(K^2)
