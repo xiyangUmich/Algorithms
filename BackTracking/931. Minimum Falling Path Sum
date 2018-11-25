@@ -1,0 +1,30 @@
+Given a square array of integers A, we want the minimum sum of a falling path through A.
+
+A falling path starts at any element in the first row, and chooses one element from each row.  The next row's choice must be in a column that is different from the previous row's column by at most one.
+
+public:
+    int minFallingPathSum(vector<vector<int>>& A) {
+        if(A.size() == 0) return 0;
+        
+        int res = INT_MAX;
+        
+        int m = A.size();
+        int n = A[0].size();
+        
+        vector<int> minSum(n, 0);
+        for(int j = 0; j < n; ++j) minSum[j] = A[m-1][j];
+        int pre = 0, curr = 0;
+        
+        for(int i = m-2; i >= 0; --i) {
+            for(int j = 0; j < n; ++j ) {
+                curr = minSum[j];
+                minSum[j] = A[i][j] + minSum[j];
+                if(j != 0) minSum[j] = min(minSum[j], A[i][j] + pre);
+                if(j != n-1) minSum[j] = min(minSum[j], A[i][j] + minSum[j+1]);
+                pre = curr;
+            }    
+        }    
+        
+        for(int j = 0; j < n; ++j) res = min(res, minSum[j]);
+        return res;
+    }
