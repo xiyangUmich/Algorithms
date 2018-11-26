@@ -1,0 +1,57 @@
+On a 2D plane, we place stones at some integer coordinate points.  Each coordinate point may have at most one stone.
+
+Now, a move consists of removing a stone that shares a column or row with another stone on the grid.
+
+What is the largest possible number of moves we can make?
+
+class Solution {
+private:
+    struct node {
+        int x;
+        int y;
+        node* root;
+        node(int i, int j):x(i), y(j), root(this){}
+    };
+    vector<node*> nodes;
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        if(stones.size() == 0) return 0;
+        int moves = 0;
+        unordered_map<int, vector<node*>> rMap;
+        unordered_map<int, vector<node*>> cMap;
+        
+        for(auto s: stones) {
+            node* temp = new node(s[0], s[1]);
+            rMap[s[0]].push_back(temp);
+            cMap[s[1]].push_back(temp);
+        }
+        
+        for(auto r:rMap) {
+            node* rep = r.second[0];
+            while(rep->root != rep) rep = rep->root;
+            for(int i = 1; i < r.second.size(); ++i) {
+                node* temp = r.second[i];
+                while(temp->root != temp) temp = temp->root;
+                if(temp != rep) {
+                    moves++;
+                    temp->root = rep;
+                } 
+            }
+        }
+        
+        for(auto c:cMap) {
+            node* rep = c.second[0];
+            while(rep->root != rep) rep = rep->root;
+            for(int i = 1; i < c.second.size(); ++i) {
+                node* temp = c.second[i];
+                while(temp->root != temp) temp = temp->root;
+                if(temp != rep) {
+                    moves++;
+                    temp->root = rep;
+                } 
+            }
+        }
+        
+        return moves;        
+    }
+};
