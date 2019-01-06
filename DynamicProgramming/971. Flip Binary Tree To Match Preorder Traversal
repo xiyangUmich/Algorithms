@@ -1,0 +1,59 @@
+//
+Given a binary tree with N nodes, each node has a different value from {1, ..., N}.
+
+A node in this binary tree can be flipped by swapping the left child and the right child of that node.
+
+Consider the sequence of N values reported by a preorder traversal starting from the root.  Call such a sequence of N values the voyage of the tree.
+
+(Recall that a preorder traversal of a node means we report the current node's value, then preorder-traverse the left child, then preorder-traverse the right child.)
+
+Our goal is to flip the least number of nodes in the tree so that the voyage of the tree matches the voyage we are given.
+
+If we can do so, then return a list of the values of all nodes flipped.  You may return the answer in any order.
+
+If we cannot do so, then return the list [-1].//
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    vector<int> res;
+    vector<int> err;
+public:
+    vector<int> flipMatchVoyage(TreeNode* root, vector<int>& voyage) {
+        if(root == NULL) return res;
+        int index = 1;
+        if(root->val != voyage[0]) {
+            err.push_back(-1);
+        }
+        else helper(root->left, root, voyage, index);
+        
+        return err.size() == 0? res:err;
+    }
+    void helper(TreeNode* curr, TreeNode* parent, vector<int>& voyage, int& index) {
+        if(index == voyage.size() || curr == NULL) return;
+        
+        if(curr->val == voyage[index]) {
+            index++;
+            helper(curr->left, curr, voyage, index);
+            helper(curr->right, curr, voyage, index);
+            return;
+        } 
+        if(parent->right == NULL || parent->right->val == curr->val
+        || parent->right->val != voyage[index]) {
+            err.push_back(-1);
+            return;
+        }
+        res.push_back(parent->val);
+        index++;
+        helper(curr->right, curr, voyage, index);
+        helper(curr->left, curr, voyage, index);
+    }
+};
