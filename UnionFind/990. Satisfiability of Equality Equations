@@ -1,0 +1,39 @@
+Given an array equations of strings that represent relationships between variables, each string equations[i] has length 4 and takes one of two different forms: "a==b" or "a!=b".  Here, a and b are lowercase letters (not necessarily different) that represent one-letter variable names.
+
+Return true if and only if it is possible to assign integers to variable names so as to satisfy all the given equations.
+
+
+class Solution {
+public:
+    bool equationsPossible(vector<string>& equations) {
+        if(equations.size() == 0) return false;
+        vector<int> map(26, 1);
+        for(int i = 0; i < 26; ++i) map[i] = i;
+        
+        for(auto e:equations) {
+            if(e[1] == '=') {
+               int p = e[0] - 'a';
+               int q = e[3] - 'a'; 
+               while(map[p] != p) p = map[p];
+               while(map[q] != q) q = map[q];
+               map[q] = p; 
+            }
+        }
+        
+        for(auto e: equations) {
+            if(e[1] == '!') {
+                int p = e[0] - 'a';
+                int q = e[3] - 'a';
+                while(map[p] != p) p = map[p];
+                while(map[q] != q) q = map[q];
+                if(p == q) {
+                    //cout << "p = " << p << endl;
+                    //cout << "q = " << q << endl;
+                return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+};
