@@ -1,0 +1,82 @@
+Given a binary tree where every node has a unique value, and a target key k, find the value of the nearest leaf node to target k in the tree.
+
+Here, nearest to a leaf means the least number of edges travelled on the binary tree to reach any leaf of the tree. Also, a node is called a leaf if it has no children.
+
+In the following examples, the input tree is represented in flattened form row by row. The actual root tree given will be a TreeNode object.
+
+
+class Solution {
+private:
+    unordered_map<int, int> parent;
+    unordered_map<int, vector<int>> minLengthToLeaf;
+    unordered_map<int, int> path;
+    int minLengthNode = -1; 
+public:
+    int findClosestLeaf(TreeNode* root, int k) {
+        minHeight(root, k);
+        
+        if(minLengthNode != -1) return minLengthNode;
+        int minPath = minLengthToLeaf[k][0];
+        minLengthNode = minLengthToLeaf[k][1];
+        //cout << "minPath0:" << minPath <<endl;
+        //cout << "minNode0:" << minLengthNode << endl;
+        int path = 1;
+        int par = k;
+        
+        while(parent.find(par) != parent.end()) {
+            par = parent[par];
+            //cout << "curr:" << par << endl;
+            int currPath = path + minLengthToLeaf[par][0];
+            //cout << "curr path:" << currPath << endl;
+            if(minPath > currPath) {
+               minPath = currPath; 
+               minLengthNode = minLengthToLeaf[par][1]; 
+            }
+            
+            path++;
+        } 
+        
+        return minLengthNode; 
+    }
+    vector<int> minHeight(TreeNode* root, int k) {
+        vector<int> res{0, root->val};
+        /* res.push_back(0);
+        res.push_back(root->val); */
+    
+        if(!root->left && !root->right) {
+            if(root->val == k) minLengthNode = root->val;
+            return res;  
+        }
+        vector<int> left{-1, -1}, right{-1, -1};
+        if(root->left) {
+            parent[root->left->val] = root->val;
+            left = minHeight(root->left, k);
+        }
+        if(root->right) {
+           parent[root->right->val] = root->val; 
+           right = minHeight(root->right, k); 
+        }
+        
+        if(left[0] == -1) {
+            res[0] = 1 + right[0];
+            res[1] = right[1];
+        }
+        else if(right[0] == -1) {
+            res[0] = 1 + left[0];
+            res[1] = left[1];
+        }
+        else if(left[0] < right[0]) {
+            res[0] = 1 + left[0];
+            res[1] = left[1];
+        }
+        else {
+            res[0] = 1 + right[0];
+            res[1] = right[1];
+        } 
+        
+        minLengthToLeaf[root->val].push_back(res[0]);
+        minLengthToLeaf[root->val].push_back(res[1]);
+        return res;   
+    } 
+    
+};
