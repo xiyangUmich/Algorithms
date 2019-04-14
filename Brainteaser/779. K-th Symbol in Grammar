@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int kthGrammar(int N, int K) {
+        if(N == 1) return 0;
+        if(N == 2) return K == 1? 0 : 1;
+        
+        //int nums = {0, 1, 1, 0};
+        int rnums = pow(2, N-1);
+        int index = K;
+        
+        while(rnums >= 4) {
+            int numInBlock = rnums/4;
+            int cnum = (K-1)/numInBlock + 1;
+            index = K%numInBlock;
+            index = index == 0? numInBlock:index;
+            if(cnum == 4) K = index;
+            if(cnum == 3) K = numInBlock + index;
+            rnums /= 2;
+        }
+        cout << index << endl;
+        return K == 1? 0: 1;
+    }
+};
