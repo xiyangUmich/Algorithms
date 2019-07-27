@@ -1,0 +1,27 @@
+/* 
+We have two integer sequences A and B of the same non-zero length.
+
+We are allowed to swap elements A[i] and B[i].  Note that both elements are in the same index position in their respective sequences.
+
+At the end of some number of swaps, A and B are both strictly increasing.  (A sequence is strictly increasing if and only if A[0] < A[1] < A[2] < ... < A[A.length - 1].)
+
+Given A and B, return the minimum number of swaps to make both sequences strictly increasing.  It is guaranteed that the given input always makes it possible.
+*/
+
+class Solution {
+public:
+    int minSwap(vector<int>& A, vector<int>& B) {
+       if(A.size() == 0 || A.size() != B.size()) return -1;
+        int n1 = 0, n2 = 1;
+        for(int index = 1; index < A.size(); ++index) {
+           int n11 = (A[index] > A[index-1] && B[index] > B[index-1])? n1: INT_MAX;
+           int n12 = (A[index] > B[index-1] && B[index] > A[index-1])? n2: INT_MAX;
+           int n21 = (A[index] > B[index-1] && B[index] > A[index-1])? n1+1: INT_MAX;
+           int n22 = (A[index] > A[index-1] && B[index] > B[index-1])? n2+1: INT_MAX; 
+           n1 = min(n11, n12);
+           n2 = min(n22, n21); 
+        }
+        return min(n1, n2);
+    }
+  
+};
