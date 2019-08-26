@@ -1,0 +1,72 @@
+struct ListNode {
+     int val;
+     ListNode *next;
+     ListNode(int x) : val(x), next(NULL) {}
+ };
+class DinnerPlates {
+private:
+    vector<vector<int>> stacks;
+    int cap = 0;
+    ListNode* nextAvailable = new ListNode(0);
+    ListNode* preNode = new ListNode(-1);
+    preNode->next = nextAvailable;
+public:
+    DinnerPlates(int capacity) {
+        cap = capacity;
+    }
+    
+    void push(int val) {
+        int index = nextAvailable->val;
+        if(stacks.size() == 0 || stacks.size() < index+1) {
+            vector<int> temp;
+            temp.push_back(val);
+            stacks.push_back(temp);
+            //cout << val << "is added to stack index: 0" << endl;
+        }
+        else {
+            stacks[index].push_back(val);
+                    //cout << val << "is added to stack index: "<< i << endl;
+        }
+        if(stacks[index].size() == cap) {
+            if(nextAvailable->next == NULL) {
+                nextAvailable->val = stacks.size();
+            }
+            else {
+                preNode->next = nextAvailable->next;
+                nextAvailable = preNode->next;
+            }
+        }
+    }
+    
+    int pop() {
+       for(int i = stacks.size()-1; i >=0; --i) {
+           if(stacks[i].size() != 0) {
+               int res = stacks[i][stacks[i].size()-1];
+               stacks[i].pop_back();
+               
+               return res;
+           }
+       }
+        return -1;
+    }
+    
+    int popAtStack(int index) {
+        if(stacks.size() < index+1 || stacks[index].size() == 0) return -1;
+        int res = stacks[index][stacks[index].size()-1];
+        stacks[index].pop_back();
+        return res;
+    }
+    
+    ListNode* prePos(ListNode* preNode, int target) {
+        ListNode* middle = findMiddle(ListNode* preNode, NULL);
+        if()
+    }
+};
+
+/**
+ * Your DinnerPlates object will be instantiated and called as such:
+ * DinnerPlates* obj = new DinnerPlates(capacity);
+ * obj->push(val);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->popAtStack(index);
+ */
