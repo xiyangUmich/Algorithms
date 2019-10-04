@@ -1,5 +1,6 @@
 Given an unsorted array of integers, find the number of longest increasing subsequence.
 
+MethodI:
 public:
     int findNumberOfLIS(vector<int>& nums) {
        if(nums.size() == 0) return 0;
@@ -38,3 +39,34 @@ public:
         }
            
         return res;
+}
+
+MethodII:
+class Solution {
+public:
+    int findNumberOfLIS(vector<int>& nums) {
+       if(nums.size() == 0) return 0;
+        int n = nums.size();
+        //int longest = 1;
+        vector<int> length(n, 1);
+        vector<int> count(n, 1);
+        
+        for(int j = 1; j < n; ++j) {
+            for(int i = j-1; i >= 0; --i) {
+                if(nums[i] < nums[j]) {
+                    if(length[i]+1 > length[j]) {
+                        length[j] = length[i]+1;
+                        count[j] = count[i];
+                    }
+                    else if(length[j] == length[i]+1) count[j] += count[i];          
+                }
+            }
+        }
+        int longest = *max_element(length.begin(), length.end());   //Can speed up the algorithm a lot
+        int res = 0;
+        for(int i = 0; i < n; ++i){
+            if(length[i] == longest) res += count[i];
+        }           
+        return res;        
+    }
+};
