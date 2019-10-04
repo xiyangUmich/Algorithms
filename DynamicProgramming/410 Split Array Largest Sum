@@ -10,16 +10,16 @@ class Solution {
       for(int i = 0;i<n;++i)            
         for(int j = i;j<n;++j)                
           maxSums[i][j][1] = i==0?sums[j]:sums[j]-sums[i-1];                
-          for(int d = 1;d<n;++d){            
-            for(int i = 0;i+d<n;++i){                
-              for(int p = 2; p<=min(d+1,m);++p){                    
-                for(int k = i;k<i+d;++k){                        
-                  maxSums[i][i+d][p] = min(maxSums[i][i+d][p], 
+      for(int d = 1;d<n;++d){            
+        for(int i = 0;i+d<n;++i){                
+          for(int p = 2; p<=min(d+1,m);++p){                    
+            for(int k = i;k<i+d;++k){                        
+              maxSums[i][i+d][p] = min(maxSums[i][i+d][p], 
                    max(maxSums[i][k][p-1],sums[i+d]-sums [k]));                    
-                }                
-             }            
-            }        
-          }        
-        return maxSums[0][n-1][m];          
-      }   
-   };
+            }                
+         }            
+        }        
+      }        
+    return maxSums[0][n-1][m];          
+  }   
+};
