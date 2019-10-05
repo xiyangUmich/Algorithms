@@ -45,3 +45,4 @@ public:
         }
                return valid[0][n-1];
     }
+//Find method II in Stack segment (O(n))
