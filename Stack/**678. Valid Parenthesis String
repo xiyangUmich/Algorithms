@@ -1,0 +1,19 @@
+bool checkValidString(string s) {
+        stack<int> ast, stk;
+        for(int i = 0; i < s.size(); ++i) {
+            if(s[i] == '(') {
+                stk.push(i);
+            }
+            else if(s[i] == '*') ast.push(i);
+            else {
+                if(stk.empty() && ast.empty()) return false;
+                if(!stk.empty()) stk.pop();
+                else ast.pop();
+            }
+        }
+        while(!stk.empty() && !ast.empty() && stk.top() < ast.top()) {
+            stk.pop();
+            ast.pop();
+        }
+        return stk.empty();
+    }
