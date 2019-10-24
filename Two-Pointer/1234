@@ -1,0 +1,65 @@
+/* Replace the Substring for Balanced String
+You are given a string containing only 4 kinds of characters 'Q', 'W', 'E' and 'R'.
+
+A string is said to be balanced if each of its characters appears n/4 times where n is the length of the string.
+
+Return the minimum length of the substring that can be replaced with any other string of the same length to make the original string s balanced.
+
+Return 0 if the string is already balanced. */
+
+class Solution {
+public:
+    int balancedString(string s) {
+        int n = static_cast<int>(s.size());
+        int res = n;
+        int p = n/4;
+        unordered_map<char, int> diffs;
+        unordered_map<char ,int> curr;
+                
+        for(int i = 0; i < n; ++i) {
+            diffs[s[i]]++;
+        }
+        int totalDiffs = 0;
+        diffs['Q'] = diffs['Q'] > p? diffs['Q'] - p: 0;
+        diffs['W'] = diffs['W'] > p? diffs['W'] - p: 0;
+        diffs['E'] = diffs['E'] > p? diffs['E'] - p: 0;
+        diffs['R'] = diffs['R'] > p? diffs['R'] - p: 0;
+        totalDiffs = diffs['Q'] + diffs['W'] + diffs['E'] + diffs['R'];
+        int currDiffs = 0;
+        if(totalDiffs == 0) return 0;
+        curr['Q'] = 0;
+        curr['W'] = 0;
+        curr['E'] = 0;
+        curr['R'] = 0;
+        
+        int i = 0, j = 0;
+        while(i< n && j < n) {
+            while(j < n && currDiffs < totalDiffs) {
+                if(diffs[s[j]] > 0) {
+                    if(curr[s[j]] < diffs[s[j]]) currDiffs++;
+                    curr[s[j]]++;
+                }
+                if(currDiffs == totalDiffs) {
+                    //res = min(res, j - i +1);
+                    break;
+                }
+                j++;
+            }
+            while(i <= j && currDiffs == totalDiffs) {
+                if(diffs[s[i]] > 0) {
+                   if(curr[s[i]] == diffs[s[i]]) {
+                       res = min(res, j - i + 1);
+                       currDiffs--;
+                       curr[s[i]]--;
+                       i++;
+                       j++;
+                       break;
+                   }
+                    curr[s[i]]--;
+                }
+                i++;
+            }
+        }
+        return res;
+    }
+};
