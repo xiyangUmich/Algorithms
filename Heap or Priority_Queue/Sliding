@@ -1,0 +1,166 @@
+class HashHeap {
+private:
+    vector<int> nums;
+    unordered_map<int, vector<int>> maps;
+    int totalNum;
+    string type;
+    bool comp(int n1, int n2) {
+        if(type == "greater") return n1 < n2;
+        else return n1 > n2;
+    }
+    void swap(int &n1, int &n2) {
+        int temp = n1;
+        n1 = n2;
+        n2 = temp;
+    }
+    void downToUpAdjust(int& curr) {
+        int head = (curr-1)/2;
+        //cout << "curr: " << curr << ";head: " << head << endl;
+        while(curr > 0 && head>= 0 && !comp(nums[head], nums[curr])) {  
+            maps[nums[head]][0] = curr;
+            swap(nums[head], nums[curr]);            
+            curr = head;
+            head = curr/2;
+        }
+    }
+    void upToDownAdjust(int& curr) {
+        while((curr*2+1 < nums.size() && !comp(nums[curr], nums[curr*2+1])) || (curr*2+2 < nums.size() && !comp(nums[curr], nums[curr*2+2]))) {
+            int child = curr*2+2 >= nums.size()? curr*2+1: comp(nums[curr*2+1], nums[curr*2+2])?curr*2+1: curr*2+2;
+            maps[nums[child]][0] = curr;
+            swap(nums[curr], nums[child]);
+            curr = child;
+        }
+    }
+public:
+    HashHeap(string t):totalNum(0), type(t){};
+    void push(int n){
+        //cout << "push: " << n << endl;
+        totalNum++;
+        if(maps.find(n) != maps.end() && maps[n][1] > 0) {
+               maps[n][1]++;
+               //cout << "exist n" << endl;
+                return; 
+        }
+        nums.push_back(n);
+        int curr = nums.size()-1;
+        //cout <<"curr: " << curr << endl;
+        if(curr > 0) downToUpAdjust(curr);
+        if(maps.find(n) == maps.end()) {
+            vector<int> temp = {curr, 1};
+            maps[n] = temp;
+        }
+        else {
+            maps[n][0] = curr;
+            maps[n][1] = 1;
+        }
+        //cout << n << " added from type:" << type << "with top:" << nums[0] << endl;
+        //cout << "maps[n]" << maps[n][0] << ", " << maps[n][1] << endl;
+    }
+    void remove(int n){
+        if(maps.find(n) == maps.end()) return;
+        maps[n][1]--;
+        totalNum--;
+        if(maps[n][1] > 0) return;
+        int curr = maps[n][0];
+        int end = nums.size()-1;
+        int last = nums[end];
+        swap(nums[curr], nums[end]);
+        swap(maps[n][0], maps[last][0]);
+        nums.pop_back();
+        upToDownAdjust(curr);
+        maps[last][0] = curr;
+        //cout << n << " removed from: " << type << "with top: " << top() <<  endl;
+        //cout << "maps[n]: "<< maps[n][0] << ", " << maps[n][1] << endl;
+    }
+    int top(){
+        return nums.size() == 0? -1: nums[0];
+    }
+    int size(){
+        return totalNum;
+    }
+    void pop() {
+        if(nums.size() == 0) return;
+        remove(nums[0]);
+    }
+    
+};
+class Solution {
+private:
+    HashHeap* bigNums = new HashHeap("greater");
+    HashHeap* smallNums = new HashHeap("less"); 
+    vector<double> res;
+    void getNextMed(int k) {
+       if(k%2) res.push_back(smallNums->top());
+        else {
+            res.push_back(((double)(smallNums->top()) + (double)(bigNums->top()))/2);
+        } 
+    }
+    void adjustNums(int k) {
+        if((bigNums->size() == smallNums->size()) ||
+          (smallNums->size() - bigNums->size() == 1)) return;
+        if(k %2 == 0) {
+            while(bigNums->size() > smallNums->size()) {
+                smallNums->push(bigNums->top());
+                bigNums->pop();
+            }
+            while(bigNums->size() < smallNums->size()) {
+                bigNums->push(smallNums->top());
+                smallNums->pop();
+            }
+        }
+        else {
+            while(smallNums->size() - bigNums->size() > 1) {
+                bigNums->push(smallNums->top());
+                smallNums->pop();
+            }
+            while(smallNums->size() - bigNums->size() < 1) {
+                smallNums->push(bigNums->top());
+                bigNums->pop();
+            }
+        }
+        
+    }
+public:
+    /*Solution() {
+       bigNums = new HashHeap("greater");
+       smallNums = new HashHeap("less"); 
+    }*/
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {        
+        int n = static_cast<int>(nums.size());
+        //vector<double> res;
+        //bigNums = new HashHeap("greater");
+       //smallNums = new HashHeap("less"); 
+        for(int i = 0; i < k; ++i) {
+            if(bigNums->size() <= k/2-1) bigNums->push(nums[i]);
+            else {
+                if(bigNums->size() == 0 || nums[i] <= bigNums->top()) smallNums->push(nums[i]);
+                else {
+                    smallNums->push(bigNums->top());
+                    bigNums->pop();
+                    bigNums->push(nums[i]);
+                }
+            }
+        }
+        getNextMed(k);
+        cout << "small top" << smallNums->top() << endl;
+        cout << "big top" << bigNums->top() << endl;
+        cout << "small size" << smallNums->size() << endl;
+        cout << "big size" << bigNums->size() << endl;
+        /*int begin = 0, end = k;
+        while(end < n) {
+            if(nums[begin] <= smallNums->top()) smallNums->remove(nums[begin]);
+            else bigNums->remove(nums[begin]);
+            if(nums[end] <= smallNums->top()) smallNums->push(nums[end]);
+            else bigNums->push(nums[end]);
+            adjustNums(k);
+            getNextMed(k);
+            begin++;
+            end++;
+        }*/
+        return res;
+    }
+    /*~Solution() {
+        delete smallNums;
+        delete bigNums;
+    }*/
+};
