@@ -1,0 +1,95 @@
+Given a robot cleaner in a room modeled as a grid.
+
+Each cell in the grid can be empty or blocked.
+
+The robot cleaner with 4 given APIs can move forward, turn left or turn right. Each turn it made is 90 degrees.
+
+When it tries to move into a blocked cell, its bumper sensor detects the obstacle and it stays on the current cell.
+
+Design an algorithm to clean the entire room using only the 4 given APIs shown below.
+
+interface Robot {
+  // returns true if next cell is open and robot moves into the cell.
+  // returns false if next cell is obstacle and robot stays on the current cell.
+  boolean move();
+
+  // Robot will stay on the same cell after calling turnLeft/turnRight.
+  // Each turn will be 90 degrees.
+  void turnLeft();
+  void turnRight();
+
+  // Clean the current cell.
+  void clean();
+}
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/robot-room-cleaner
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+private:
+    set<pair<int, int>> visited;
+    void turnBack(Robot& robot) {
+        robot.turnLeft();
+        robot.turnLeft();
+    }
+public:
+    void cleanRoom(Robot& robot) {
+        robot.clean();
+        visited.insert(make_pair(0, 0));
+        helper(robot, 0, 0);
+    }
+    void helper(Robot& robot, int x, int y) {
+        if(robot.move()) {
+            if(visited.find(make_pair(x, y+1)) == visited.end()) {
+                robot.clean();
+                visited.insert(make_pair(x, y+1));
+                helper(robot, x, y+1);
+            }
+            turnBack(robot);
+            robot.move();
+            turnBack(robot);
+        }
+        robot.turnLeft();
+        if(robot.move()) {
+            if(visited.find(make_pair(x-1, y)) == visited.end()) {
+                robot.clean();
+                visited.insert(make_pair(x-1, y));
+                robot.turnRight();
+                helper(robot, x-1, y);
+                robot.turnLeft();
+            }
+            turnBack(robot);
+            robot.move();
+            turnBack(robot);
+        }
+        robot.turnRight();
+        robot.turnRight();
+        if(robot.move()) {
+            if(visited.find(make_pair(x+1, y)) == visited.end()) {
+                robot.clean();
+                visited.insert(make_pair(x+1, y));
+                robot.turnLeft();
+                helper(robot, x+1, y);
+                robot.turnRight();
+            }
+            turnBack(robot);
+            robot.move();
+            turnBack(robot);
+        }
+        robot.turnLeft();
+        turnBack(robot);
+        if(robot.move()) {
+            if(visited.find(make_pair(x, y-1)) == visited.end()) {
+                robot.clean();
+                visited.insert(make_pair(x, y-1));
+                turnBack(robot);
+                helper(robot, x, y-1);
+                turnBack(robot);
+            }
+            turnBack(robot);
+            robot.move();
+            turnBack(robot);
+        }
+        turnBack(robot);
+    }
+};
