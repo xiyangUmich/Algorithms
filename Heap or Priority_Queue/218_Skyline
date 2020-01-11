@@ -1,0 +1,110 @@
+class MaxHashHeap {
+private:
+    vector<int> nums;
+    unordered_map<int, int> numMaps;
+    unordered_map<int, int> indexMaps;
+    int totalSize;
+    //int maxNum;
+public:
+    MaxHashHeap():totalSize(0){};
+    bool empty() {
+        return totalSize == 0;
+    }
+    int front() {
+        return nums[0];
+    }
+    void push(int n) {
+        totalSize++;
+        numMaps[n]++;
+        if(numMaps[n] > 1) return;
+        nums.push_back(n);
+        int index = nums.size()-1;
+        while(index > 0 && (index-1)/2 >= 0 && nums[(index-1)/2] < n ) {
+            int par = nums[(index-1)/2];
+            int parInd = (index-1)/2;
+            swap(nums[parInd], nums[index]);
+            indexMaps[par] = index;
+            index = (index-1)/2;
+        }
+        indexMaps[n] = index;
+    }
+    void pop(int n) {
+        totalSize--;
+        numMaps[n]--;
+        if(numMaps[n] > 0) return;
+        int index = indexMaps[n];
+        int last = nums.size()-1;
+        int lastNum = nums[last];
+        swap(nums[index], nums[last]);
+        nums.pop_back();
+        while((index*2+1 < last && nums[index] < nums[index*2+1]) ||
+        (index*2+2 < last && nums[index] < nums[index*2+2])) {
+            int next = index*2+2 >= last || nums[index*2+1] > nums[index*2+2]? index*2+1: index*2+2;
+            int temp = nums[next];
+            swap(nums[index], nums[next]);
+            //if(lastNum == 2) print();
+            indexMaps[temp] = index;
+            index = next;
+        }
+        indexMaps[lastNum] = index;
+    }
+        void print() {
+        for(int n: nums) cout << n << "->";
+        cout << endl;
+    }
+};
+
+class Solution {
+private:
+    struct Node {
+        int index;
+        int height;
+        char side;
+        Node(int i, int h, char s): index(i), height(h), side(s){};
+    };
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        int n = static_cast<int>(buildings.size());
+        vector<Node> recs;
+        vector<vector<int>> res;
+        for(int i = 0; i < n; ++i) {
+            Node temp1(buildings[i][0], buildings[i][2], 'l');
+            Node temp2(buildings[i][1], buildings[i][2], 'r');
+            recs.push_back(temp1);
+            recs.push_back(temp2);
+        }
+        sort(recs.begin(), recs.end(), [](Node &n1, Node &n2){return (n1.index < n2.index) || (n1.index == n2.index && n1.side != n2.side && n1.side == 'l') || 
+        (n1.index == n2.index && n1.side == n2.side && ((n1.side == 'l' && n1.height > n2.height) || (n1.side == 'r' && n1.height < n2.height)));}); 
+
+        MaxHashHeap* hh = new MaxHashHeap();
+        for(auto rc: recs) {
+            //cout << rc.index << "," << rc.height << ", " << rc.side << endl;
+            if(rc.side == 'l') {
+                if(hh->empty() || hh->front() < rc.height) {
+                    vector<int> temp{rc.index, rc.height};
+                    res.push_back(temp);
+                    //cout << rc.height << "add to res" << endl;
+                }
+                hh->push(rc.height);
+                //cout << "push " << rc.height << endl;
+                //hh->print();
+            }
+            else {
+                hh->pop(rc.height);
+                //cout << "pop " << rc.height << endl;
+                //hh->print();
+                if(hh->empty() || hh->front() < rc.height) {
+                    vector<int> temp{rc.index};
+                    if(hh->empty()) temp.push_back(0);
+                    else {
+                        temp.push_back(hh->front());
+                    }
+                res.push_back(temp);
+                }
+            }
+            //hh->print();
+        }
+        delete hh;
+        return res;  
+    }
+};
