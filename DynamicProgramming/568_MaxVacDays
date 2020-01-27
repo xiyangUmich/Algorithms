@@ -1,0 +1,49 @@
+/*
+LeetCode wants to give one of its best employees the option to travel among N cities to collect algorithm problems. But all work and no play makes Jack a dull boy, you could take vacations in some particular cities and weeks. Your job is to schedule the traveling to maximize the number of vacation days you could take, but there are certain rules and restrictions you need to follow.
+
+Rules and restrictions:
+
+You can only travel among N cities, represented by indexes from 0 to N-1. Initially, you are in the city indexed 0 on Monday.
+The cities are connected by flights. The flights are represented as a N*N matrix (not necessary symmetrical), called flights representing the airline status from the city i to the city j. If there is no flight from the city i to the city j, flights[i][j] = 0; Otherwise, flights[i][j] = 1. Also, flights[i][i] = 0 for all i.
+You totally have K weeks (each week has 7 days) to travel. You can only take flights at most once per day and can only take flights on each week's Monday morning. Since flight time is so short, we don't consider the impact of flight time.
+For each city, you can only have restricted vacation days in different weeks, given an N*K matrix called days representing this relationship. For the value of days[i][j], it represents the maximum days you could take vacation in the city i in the week j.
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-vacation-days
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+
+class Solution {
+public:
+    int maxVacationDays(vector<vector<int>>& flights, vector<vector<int>>& days) {
+      if(days.size() == 0 || days[0].size() == 0) return 0;
+      int N = days.size();  
+      int K = days[0].size();
+      vector<vector<int>> dp(2, vector<int>(N, -1));
+      int res = 0;
+      int temp = -1;
+      for(int i = 0; i < N; ++i){
+          if(flights[0][i] || i == 0){
+              dp[0][i] = days[i][0];
+              //cout << i << ":" << dp[i][0] << endl;
+          }
+      }
+      for(int k = 1; k < K; ++k){
+          for(int i = 0; i < N; ++i){
+              temp = -1;
+              for(int j = 0; j < N; ++j){
+                  if(flights[j][i] || i == j){
+                      temp = max(temp, dp[(k-1)%2][j]);
+                      //cout << k << "-" << j << '-' << i << ":" << dp[k][i] << endl;
+                  }                
+              }
+              if(temp >= 0) dp[k%2][i] = temp + days[i][k];
+          }
+      }
+      
+      for(int i = 0; i < N; ++i){
+          res = max(res, dp[(K-1)%2][i]);
+      }
+
+      return res;
+    }
+};

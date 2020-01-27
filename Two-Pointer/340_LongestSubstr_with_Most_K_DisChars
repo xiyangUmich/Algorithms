@@ -1,0 +1,51 @@
+/*
+Given a string, find the length of the longest substring T that contains at most k distinct characters.
+
+
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-substring-with-at-most-k-distinct-characters
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
+class Solution {
+public:
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        if(s.size() == 0 || k == 0) return 0;
+        int begin = 0, end  = 0;
+        int str = 0;
+        int res = 0;
+        unordered_map<int, int> maps;
+        int diff = 0;
+        int n = s.size();
+        while(end < n) {     
+            //cout << "start: " << begin << "->" << end << endl;      
+            //int curr = 1<<(s[end]-'a');
+            maps[s[end]-'a']++;
+            if(maps[s[end]-'a'] == 1) {
+                diff++;
+                //str = str|curr;
+                if(diff == k+1) {
+                    //end--;
+                    //diff--;
+                    //cout << "find: " << begin << "->" << end << endl;
+                    res = max(res, end-begin);
+                    while(begin < end) {                        
+                        maps[s[begin]-'a']--;
+                        if(maps[s[begin]-'a'] == 0) {
+                            diff--;
+                            //curr = 1<<(s[begin]-'a');
+                            //str = str^curr;
+                            begin++;
+                            break;
+                        }
+                        begin++;
+                    }
+                }
+            }
+            end++;
+        }
+        return max(res, end-begin);
+    }
+};
+
+//Easy to get mistake when moving begin&end pointers

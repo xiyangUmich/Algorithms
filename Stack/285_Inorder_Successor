@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
+        stack<TreeNode*> st;
+        if(!root || !p) return NULL;
+        TreeNode* curr = root;
+        bool findP = false;
+        st.push(curr);
+        //cout << curr->val << "pushed" << endl;
+        while(curr->left) {
+            st.push(curr->left);
+            curr = curr->left;
+        }
+        //TreeNode* pre = st.top();
+        while(!st.empty()) {
+            curr = st.top();            
+            st.pop();
+            //cout << curr->val << "poped" << endl;
+            if(findP) return curr;
+            if(curr == p) {findP = true;}
+            if(curr->right) {
+                curr = curr->right;
+                st.push(curr);
+                //cout << curr->val << "pushed" << endl;
+                while(curr->left) {
+                    st.push(curr->left);
+                    curr = curr->left;
+                }
+            }
+        }
+
+        return NULL;
+    }
+    
+};
